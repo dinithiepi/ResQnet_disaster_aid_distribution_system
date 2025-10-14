@@ -1,0 +1,227 @@
+.slideshow {
+  position: relative;
+  width: 100vw;
+  height: 75vh; /* larger slideshow so description is below and requires scrolling */
+  overflow: hidden;
+}
+
+.container {
+  width: 100vw;
+  /* leave space for top bar */
+  min-height: calc(100vh - 72px);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  margin: 0;
+  padding: 0;
+  background: #000;
+}
+
+/* Top bar with brand on left and links on right */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  backdrop-filter: blur(6px);
+  background: rgba(0,0,0,0.45); /* semi-transparent */
+  z-index: 40;
+}
+
+.brand {
+  color: #d3f2fc;
+  font-weight: 800;
+  font-size: 50px;
+}
+
+/* Adjust top-nav placement inside top-bar */
+.top-bar .top-nav { position: static; gap: 12px; }
+.top-bar .top-nav a { background: rgba(255,255,255,0.06); color: #fff }
+
+.slide {
+  position: absolute;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000; /* letterbox color */
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+.slide img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.slideshow-description {
+  padding: 24px;
+  background: #fff;
+  color: #222;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.slideshow-description { margin-top: 12px; }
+
+.slideshow-description h2 {
+  margin: 0 0 8px 0;
+}
+
+.slideshow-description p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.description-list {
+  margin: 12px 0 0 20px;
+  padding: 0;
+}
+
+.description-list li {
+  margin: 8px 0;
+  line-height: 1.6;
+}
+
+/* Top-right navigation */
+.top-nav {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  display: flex;
+  gap: 16px;
+  z-index: 30;
+}
+
+.top-nav a {
+  color: #fff;
+  text-decoration: none;
+  background: rgba(0,0,0,0.4);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: background 0.15s ease, transform 0.08s ease;
+}
+
+.top-nav a:hover,
+.top-nav a:focus {
+  background: rgba(255,255,255,0.12);
+  transform: translateY(-1px);
+}
+
+/* Centered main topic */
+.main-topic {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fff;
+  z-index: 25;
+  padding: 8px 16px;
+  max-width: 90vw;
+}
+
+.main-topic h1 {
+  font-size: clamp(28px, 6vw, 56px);
+  margin: 0 0 8px 0;
+  text-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+
+.main-topic .subtitle {
+  margin: 0;
+  font-size: clamp(14px, 2.8vw, 20px);
+  opacity: 0.95;
+}
+
+
+/* Donor Page Styling */
+.donor-page {
+  background-color: #f9fbfd;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 120px;
+  color: #333;
+}
+
+.donor-container {
+  background: #fff;
+  padding: 40px 50px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+}
+
+.donor-container h2 {
+  color: #007b7f;
+  margin-bottom: 12px;
+  font-size: 28px;
+}
+
+.donor-intro {
+  font-size: 15px;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.donor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.donor-form input {
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.donor-form input:focus {
+  border-color: #00a2a8;
+}
+
+.button-green {
+  background-color: #00a67c;
+  color: white;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.button-green:hover {
+  background-color: #008f6c;
+}
+
+/* Ensure nav and overlays are readable on mobile */
+@media (max-width: 600px) {
+  .top-nav { right: 12px; gap: 8px; top: 12px }
+  .top-nav a { padding: 6px 8px; font-size: 14px }
+  .main-topic h1 { font-size: 24px }
+}

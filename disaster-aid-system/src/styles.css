@@ -40,6 +40,27 @@
   font-size: 50px;
 }
 
+/* header links styling */
+.top-bar .top-nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 14px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.04);
+}
+
+.top-bar .top-nav a.donate-link {
+  background: rgba(255,255,255,0.12);
+  font-weight: 700;
+}
+
+.top-bar .top-nav a.home-link {
+  background: rgba(255,255,255,0.12);
+  font-weight: 700;
+  margin-right: 8px;
+}
+
 /* Adjust top-nav placement inside top-bar */
 .top-bar .top-nav { position: static; gap: 12px; }
 .top-bar .top-nav a { background: rgba(255,255,255,0.06); color: #fff }
@@ -217,6 +238,260 @@
 
 .button-green:hover {
   background-color: #008f6c;
+}
+/* Donate Landing Page */
+.donate-page {
+  background-color: #f4f9fc;
+  color: #222;
+  padding-top: 100px;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.donate-hero {
+  padding: 40px 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.donate-hero h1 {
+  font-size: 36px;
+  color: #007b7f;
+  margin-bottom: 16px;
+}
+
+.donate-hero p {
+  font-size: 16px;
+  line-height: 1.7;
+  margin-bottom: 30px;
+  color: #444;
+}
+
+.donate-button {
+  background: #00a67c;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.donate-button:hover {
+  background: #008f6c;
+}
+
+.donate-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px 20px;
+}
+
+.donate-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  width: 280px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.donate-card:hover {
+  transform: translateY(-5px);
+}
+
+.donate-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.donate-card p {
+  padding: 16px;
+  font-size: 15px;
+  color: #555;
+}
+
+.donate-info {
+  background: #eaf6f8;
+  padding: 50px 20px;
+  margin-top: 40px;
+}
+
+.donate-info h2 {
+  color: #007b7f;
+  margin-bottom: 16px;
+}
+
+.donate-info p {
+  max-width: 700px;
+  margin: auto;
+  font-size: 16px;
+  line-height: 1.8;
+  color: #444;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .donate-gallery {
+    flex-direction: column;
+    align-items: center;
+  }
+  .donate-card {
+    width: 90%;
+  }
+}
+/* Map Page */
+.map-page {
+  text-align: center;
+  background: #f8fafc;
+  min-height: 100vh;
+  padding-top: 100px;
+}
+
+.map-page h2 {
+  color: #007b7f;
+  margin-bottom: 10px;
+  font-size: 26px;
+}
+
+.map-legend {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: inline-block;
+  padding: 12px 18px;
+  margin-bottom: 40px;
+  font-size: 15px;
+  color: #333;
+}
+
+.map-legend img {
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+/* General page layout */
+.inventory-page {
+  background-color: #f4f6f8; /* Light gray background */
+  min-height: 100vh;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Centered white container */
+.inventory-container {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 80%;
+  max-width: 900px;
+}
+
+/* Table styling */
+.inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.inventory-table th,
+.inventory-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.inventory-table th {
+  background-color: #0077b6;
+  color: white;
+}
+
+.low-stock {
+  background-color: #ffe5e5;
+}
+
+.low {
+  color: #d00000;
+  font-weight: bold;
+}
+
+.ok {
+  color: #007f5f;
+  font-weight: bold;
+}
+
+/* Loading text */
+.loading-text {
+  font-size: 18px;
+  color: #333;
+  text-align: center;
+  padding: 40px;
+}
+
+
+/* === About Page Styles === */
+
+.about-container {
+  min-height: 100vh;
+  background-color: #f5f6fa;
+  padding: 60px 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.about-container h1 {
+  font-size: 2.5rem;
+  color: #2d3436;
+  margin-bottom: 20px;
+}
+
+.about-intro {
+  font-size: 1.1rem;
+  max-width: 800px;
+  color: #555;
+  line-height: 1.7;
+  margin-bottom: 50px;
+}
+
+.about-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.about-card {
+  background-color: #ffffff;
+  padding: 30px 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.about-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+.about-card h2 {
+  color: #1e88e5;
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+}
+
+.about-card p {
+  color: #666;
+  line-height: 1.6;
+  font-size: 1rem;
 }
 
 /* Ensure nav and overlays are readable on mobile */

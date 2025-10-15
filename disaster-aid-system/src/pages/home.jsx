@@ -22,9 +22,9 @@ function Home() {
       <header className="top-bar">
         <div className="brand">ResQnet</div>
         <nav className="top-nav" aria-label="Main navigation">
-          <a href="/donors">Donors</a>
+          <a href="/donate">Donate</a>
           <a href="/inventory">Inventory</a>
-          <a href="/admindashboard">Admin</a>
+          <a href="/map">Map</a>
           <a href="/about">About</a>
         </nav>
       </header>

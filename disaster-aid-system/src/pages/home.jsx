@@ -3,7 +3,8 @@ import "../styles.css";
 
 const images = [
   "/images/aid1.jpg",
-  "/images/aid2.jpg"
+  "/images/aid2.jpg",
+  "/images/aid4.jpg"
   
 ];
 

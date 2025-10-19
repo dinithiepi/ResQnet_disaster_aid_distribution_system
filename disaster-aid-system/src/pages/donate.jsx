@@ -1,4 +1,6 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header"; // adjust path if needed
 import "../styles.css";
 
 export default function Donate() {
@@ -6,18 +8,9 @@ export default function Donate() {
 
   return (
     <div className="page-root">
-      {/* 🔹 Top Navigation Bar */}
-      <header className="top-bar">
-        <div className="brand">ResQNet</div>
-        <nav className="top-nav" aria-label="Main navigation">
-          <a href="/home">Home</a>
-          <a href="/inventory">Inventory</a>
-          <a href="/map">Map</a>
-          <a href="/about">About</a>
-        </nav>
-      </header>
+      {/* ✅ Reuse Header */}
+      <Header />
 
-      {/* 🔹 Donate Content */}
       <main className="container donate-page">
         <div className="donate-hero">
           <h1>Together, We Can Make a Difference</h1>

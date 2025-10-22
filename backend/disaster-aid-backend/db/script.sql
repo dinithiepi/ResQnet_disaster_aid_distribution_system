@@ -1,8 +1,8 @@
 -- PostgreSQL-compatible script for "Disaster Aid Management System"
 
 -- 1) Create database (optional: skip if it already exists)
-drop database if exists DisasterAidDB;
-CREATE DATABASE DisasterAidDB;
+drop database if exists disasteraiddb;
+CREATE DATABASE disasteraiddb;
 \c disasteraiddb;
 
 -- Table: Admin

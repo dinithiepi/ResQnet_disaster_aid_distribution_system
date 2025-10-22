@@ -11,12 +11,18 @@ app.get('/', (req, res) => {
   res.json({ message: 'API Gateway is running' });
 });
 
-// Example proxy route for auth service
+/*Example proxy route for auth service
 app.use('/api/auth', createProxyMiddleware({
   target: 'http://localhost:4002', // your auth service port
   changeOrigin: true,
   pathRewrite: { '^/api/auth': '/api/auth' }
+}));*/
+app.use('/api/inventory', createProxyMiddleware({
+  target: 'http://localhost:4001',
+  changeOrigin: true,
+  pathRewrite: { '^/api/inventory': '/api/inventory' }
 }));
+
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`✅ API Gateway running on port ${PORT}`));

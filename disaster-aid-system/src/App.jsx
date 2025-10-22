@@ -25,6 +25,8 @@ export default function App() {
           <Route path="/about" element={<About />} />
         </Routes>
       </div>
+      {/* Footer strip with images from public/images */}
+      <div className="footer-strip" role="contentinfo" aria-label="Donation images" />
     </Router>
   );
 }

@@ -15,7 +15,7 @@
   justify-content: flex-start;
   margin: 0;
   padding: 0;
-  background: #000;
+  background: #e6f7ff; /* light blue page background */
 }
 
 /* Top bar with brand on left and links on right */
@@ -73,9 +73,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000; /* letterbox color */
+  background: #f3f5f7; /* letterbox color adjusted to page background */
   opacity: 0;
   transition: opacity 1s ease-in-out;
+}
+
+/* Footer strip that shows donation/aid images */
+.footer-strip {
+  width: 100%;
+  /* Plain decorative strip without images */
+  background-color: #e6f7ff; /* match page background */
+  background-image: none;
+  background-repeat: none;
+  height: 120px; /* keep spacing, no images */
+  box-sizing: border-box;
+  display: block;
 }
 
 .slide.active {

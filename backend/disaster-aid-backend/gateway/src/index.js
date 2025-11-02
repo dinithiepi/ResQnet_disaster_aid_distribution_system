@@ -1,28 +1,51 @@
-// gateway/src/index.js
-require('dotenv').config();
+// File: index.js of API Gateway
+
 const express = require('express');
+const cors = require('cors');
 const { createProxyMiddleware } = require('http-proxy-middleware');
+require('dotenv').config(); // load environment variables from .env
 
 const app = express();
-app.use(express.json());
+const PORT = process.env.PORT || 4000;
 
-// Health route
-app.get('/', (req, res) => {
-  res.json({ message: 'API Gateway is running' });
-});
+// ---------------------------
+// Middleware
+// ---------------------------
 
-/*Example proxy route for auth service
-app.use('/api/auth', createProxyMiddleware({
-  target: 'http://localhost:4002', // your auth service port
-  changeOrigin: true,
-  pathRewrite: { '^/api/auth': '/api/auth' }
-}));*/
-app.use('/api/inventory', createProxyMiddleware({
-  target: 'http://localhost:4001',
-  changeOrigin: true,
-  pathRewrite: { '^/api/inventory': '/api/inventory' }
+// NOTE: CORS is enabled globally here. 
+// In production, you might want to restrict allowed origins.
+app.use(cors());
+
+// Token verification middleware for protected routes
+//const verifyToken = require('./middlewares/verifyToken');
+
+
+// ---------------------------
+// Proxy routes
+// ---------------------------
+
+// Forward requests to the inventory service
+app.use('/inventory', createProxyMiddleware({
+    target: 'http://localhost:4001', // inventory microservice
+    changeOrigin: true,
+    pathRewrite: (path, req) => req.originalUrl.replace(/^\/inventory/, '/inventory')
 }));
 
 
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`✅ API Gateway running on port ${PORT}`));
+
+
+
+// ---------------------------
+// Root route for testing
+// ---------------------------
+app.get('/', (req, res) => {
+    res.send('API Gateway is running');
+});
+
+
+// ---------------------------
+// Start the server
+// ---------------------------
+app.listen(PORT, () => {
+    console.log(`API Gateway running on port ${PORT}`);
+});

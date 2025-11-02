@@ -1,23 +1,23 @@
-const pool = require("../db"); // path to your db.js
+const express = require('express');
+const router = express.Router();
+const pool = require('../../../db/db.js');
 
-// Get all inventory items
-exports.getInventory = async (req, res) => {
+// ==============================
+// GET ALL INVENTORY ITEMS
+// ==============================
+const getInventory = async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM Inventory ORDER BY ItemID");
-    const items = result.rows.map(item => ({
-      id: item.itemid,
-      name: item.itemcategory,
-      count: item.quantity
-    }));
-    res.json(items);
+    const result = await pool.query(`SELECT * FROM Inventory ORDER BY ItemID
+     `);
+    res.json(result.rows);
   } catch (err) {
-    console.error("Error fetching inventory:", err);
-    res.status(500).json({ error: "Failed to fetch inventory" });
+    console.error('Error fetching inventory:', err);
+    res.status(500).json({ message: 'Database error', error: err.message });
   }
 };
 
 // Get all donations
-exports.getDonations = async (req, res) => {
+/*exports.getDonations = async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM Donation ORDER BY DonationID");
     const donations = result.rows.map(donation => ({
@@ -34,4 +34,22 @@ exports.getDonations = async (req, res) => {
     console.error("Error fetching donations:", err);
     res.status(500).json({ error: "Failed to fetch donations" });
   }
+};*/
+
+const getdonations = async (req, res) => {
+  try {
+    const result = await pool.query(`SELECT * FROM donation ORDER BY donationid
+     `);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching donations:', err);
+    res.status(500).json({ message: 'Database error', error: err.message });
+  }
+};
+
+// Export functions
+module.exports = {
+  getInventory,
+  getdonations
+
 };

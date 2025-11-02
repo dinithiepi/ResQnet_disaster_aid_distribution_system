@@ -25,3 +25,6 @@ router.get('/donations', async (req, res, next) => {
 });
 
 module.exports = router;
+
+//http://localhost:4000/inventory/donations    donation
+//http://localhost:4000/inventory              inventory

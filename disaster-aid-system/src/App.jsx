@@ -5,28 +5,53 @@ import Donors from "./pages/donors";
 import Donate from "./pages/donate";
 import Map from "./pages/map";
 import About from "./pages/about";
-import AdminDashboard from "./pages/admindashboard";
-import Header from "./components/Header";
+import MainLayout from "./components/MainLayout";
+
+// Import new admin components
+import ProtectedRoute from "./components/admin/ProtectedRoute";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminRegister from "./pages/admin/AdminRegister";
+import AdminDashboardLayout from "./pages/admin/AdminDashboard";
+import DashboardOverview from "./pages/admin/DashboardOverview";
+import LiveChat from "./pages/admin/LiveChat";
+import DisasterAreaManagement from "./pages/admin/DisasterAreaManagement";
+import InventoryManagement from "./pages/admin/InventoryManagement";
 
 export default function App() {
   return (
     <Router>
-      
-
-  <Header />
-  <div className="container">
-        <Routes>
+      <Routes>
+        {/* Main site routes with header and container */}
+        <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/donors" element={<Donors />} />
           <Route path="/donate" element={<Donate />} />
-          <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/map" element={<Map />} />
           <Route path="/about" element={<About />} />
-        </Routes>
-      </div>
-      {/* Footer strip with images from public/images */}
-      <div className="footer-strip" role="contentinfo" aria-label="Donation images" />
+        </Route>
+        
+        {/* Admin Routes (no main layout) */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/register" element={<AdminRegister />} />
+        
+        {/* Protected Admin Routes */}
+        <Route 
+          path="/admin/dashboard" 
+          element={
+            <ProtectedRoute>
+              <AdminDashboardLayout />
+            </ProtectedRoute>
+          } 
+        >
+          {/* Nested routes - default to overview */}
+          <Route index element={<DashboardOverview />} />
+          <Route path="overview" element={<DashboardOverview />} />
+          <Route path="live-chat" element={<LiveChat />} />
+          <Route path="disaster-areas" element={<DisasterAreaManagement />} />
+          <Route path="inventory" element={<InventoryManagement />} />
+        </Route>
+      </Routes>
     </Router>
   );
 }

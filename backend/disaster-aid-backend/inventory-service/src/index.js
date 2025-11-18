@@ -16,6 +16,7 @@ app.use(express.json());
 
 // Routes
 const inventoryRoutes = require('./routes/inventoryRoutes');
+
 // Mount inventory routes under /inventory
 app.use('/inventory', inventoryRoutes);
 

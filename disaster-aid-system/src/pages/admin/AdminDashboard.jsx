@@ -53,6 +53,12 @@ function AdminDashboard() {
               📦 Inventory Management
             </button>
             <button 
+              onClick={() => navigate('/admin/dashboard/donations')}
+              className="nav-item"
+            >
+              💝 Donation Requests
+            </button>
+            <button 
               onClick={() => navigate('/admin/dashboard/live-chat')}
               className="nav-item"
             >

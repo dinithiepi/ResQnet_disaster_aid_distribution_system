@@ -19,8 +19,7 @@ function DisasterAreaManagement() {
 
   const fetchAreas = async () => {
     try {
-      // TODO: Replace with actual API endpoint
-      const response = await fetch('http://localhost:5173/admin/dashboard/disaster-areas');
+      const response = await fetch('http://localhost:4001/api/disaster-areas');
       const data = await response.json();
       setAreas(data);
     } catch (error) {

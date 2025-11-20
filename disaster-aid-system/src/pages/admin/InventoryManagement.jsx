@@ -20,7 +20,7 @@ function InventoryManagement() {
 
   const fetchInventory = async () => {
     try {
-      const response = await fetch('http://localhost:5173/admin/dashboard/inventory');
+      const response = await fetch('http://localhost:4001/api/inventory');
       const data = await response.json();
       setInventory(data);
     } catch (error) {

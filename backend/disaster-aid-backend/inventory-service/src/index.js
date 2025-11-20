@@ -16,9 +16,16 @@ app.use(express.json());
 
 // Routes
 const inventoryRoutes = require('./routes/inventoryRoutes');
+const disasterAreaRoutes = require('./routes/disasterAreaRoutes');
 
-// Mount inventory routes under /inventory
+// Mount inventory routes under /api/inventory (for admin CRUD)
+app.use('/api/inventory', inventoryRoutes);
+
+// Mount inventory routes under /inventory (for backward compatibility with donations)
 app.use('/inventory', inventoryRoutes);
+
+// Mount disaster area routes under /api/disaster-areas
+app.use('/api/disaster-areas', disasterAreaRoutes);
 
 
 // Error handling middleware - add this after routes

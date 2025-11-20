@@ -16,6 +16,7 @@ import DashboardOverview from "./pages/admin/DashboardOverview";
 import LiveChat from "./pages/admin/LiveChat";
 import DisasterAreaManagement from "./pages/admin/DisasterAreaManagement";
 import InventoryManagement from "./pages/admin/InventoryManagement";
+import DonationManagement from "./pages/admin/DonationManagement";
 
 export default function App() {
   return (
@@ -50,6 +51,7 @@ export default function App() {
           <Route path="live-chat" element={<LiveChat />} />
           <Route path="disaster-areas" element={<DisasterAreaManagement />} />
           <Route path="inventory" element={<InventoryManagement />} />
+          <Route path="donations" element={<DonationManagement />} />
         </Route>
       </Routes>
     </Router>

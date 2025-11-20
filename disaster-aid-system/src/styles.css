@@ -226,16 +226,24 @@
   gap: 14px;
 }
 
-.donor-form input {
+.donor-form input,
+.donor-form textarea {
   padding: 10px 14px;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 15px;
   outline: none;
   transition: border 0.2s ease;
+  font-family: inherit;
 }
 
-.donor-form input:focus {
+.donor-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.donor-form input:focus,
+.donor-form textarea:focus {
   border-color: #00a2a8;
 }
 
@@ -250,9 +258,48 @@
   transition: background 0.2s ease;
 }
 
-.button-green:hover {
+.button-green:hover:not(:disabled) {
   background-color: #008f6c;
 }
+
+.button-green:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Alert Messages */
+.alert {
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border-left: 4px solid #28a745;
+  color: #155724;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  border-left: 4px solid #dc3545;
+  color: #721c24;
+}
+
+.form-note {
+  background-color: #e7f3ff;
+  border-left: 4px solid #0077b6;
+  padding: 12px 15px;
+  border-radius: 6px;
+  margin-top: 15px;
+  font-size: 14px;
+  color: #004085;
+}
+
 /* Donate Landing Page */
 .donate-page {
   background-color: #f4f9fc;
@@ -1781,5 +1828,221 @@
   
   .stat-number {
     font-size: 42px;
+  }
+}
+
+/* ============================================
+   DONATION MANAGEMENT (ADMIN) STYLES
+   ============================================ */
+
+.donation-management {
+  padding: 20px;
+}
+
+.section-description {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 16px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.tab {
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.3s;
+}
+
+.tab.active {
+  color: #6a0dad;
+  border-bottom-color: #6a0dad;
+}
+
+.tab:hover {
+  color: #6a0dad;
+}
+
+/* Donations Grid */
+.donations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+.donation-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+}
+
+.donation-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.donation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.donation-header h3 {
+  color: #333;
+  font-size: 20px;
+  margin: 0;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-badge-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-badge-contacted {
+  background: #cfe2ff;
+  color: #084298;
+}
+
+.status-badge-scheduled {
+  background: #d1e7dd;
+  color: #0f5132;
+}
+
+.status-badge-received {
+  background: #d1e7dd;
+  color: #0a3622;
+}
+
+.status-badge-rejected {
+  background: #f8d7da;
+  color: #842029;
+}
+
+/* Donation Details */
+.donation-details {
+  margin-bottom: 20px;
+}
+
+.detail-row {
+  display: flex;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.detail-row .label {
+  font-weight: 600;
+  color: #666;
+  min-width: 100px;
+  font-size: 14px;
+}
+
+.detail-row .value {
+  color: #333;
+  font-size: 14px;
+  flex: 1;
+}
+
+/* Donation Actions */
+.donation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.btn-action {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  flex: 1;
+  min-width: 140px;
+}
+
+.btn-contact {
+  background: #0dcaf0;
+  color: white;
+}
+
+.btn-contact:hover {
+  background: #0aa2c0;
+}
+
+.btn-schedule {
+  background: #0d6efd;
+  color: white;
+}
+
+.btn-schedule:hover {
+  background: #0b5ed7;
+}
+
+.btn-receive {
+  background: #198754;
+  color: white;
+}
+
+.btn-receive:hover {
+  background: #157347;
+}
+
+.btn-reject {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-reject:hover {
+  background: #bb2d3b;
+}
+
+.loading,
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-size: 18px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .donations-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .donation-actions {
+    flex-direction: column;
+  }
+  
+  .btn-action {
+    width: 100%;
   }
 }

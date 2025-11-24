@@ -31,9 +31,21 @@ app.use('/inventory', createProxyMiddleware({
     pathRewrite: (path, req) => req.originalUrl.replace(/^\/inventory/, '/inventory')
 }));
 
+// Forward requests to the admin service
+app.use('/admin', createProxyMiddleware({
+    target: 'http://localhost:4002', // admin microservice
+    changeOrigin: true,
+    pathRewrite: {
+        '^/admin': '/api/admin', // rewrite path
+    },
+}));
 
-
-
+// Forward requests to the manager service
+app.use('/manager', createProxyMiddleware({
+    target: 'http://localhost:4003', // manager microservice
+    changeOrigin: true,
+    pathRewrite: (path, req) => req.originalUrl.replace(/^\/manager/, '/manager')
+}));
 
 // ---------------------------
 // Root route for testing

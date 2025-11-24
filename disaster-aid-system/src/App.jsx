@@ -17,6 +17,12 @@ import LiveChat from "./pages/admin/LiveChat";
 import DisasterAreaManagement from "./pages/admin/DisasterAreaManagement";
 import InventoryManagement from "./pages/admin/InventoryManagement";
 import DonationManagement from "./pages/admin/DonationManagement";
+import ManagerApproval from "./pages/admin/ManagerApproval";
+
+// Import manager components
+import ManagerLogin from "./pages/manager/ManagerLogin";
+import ManagerRegister from "./pages/manager/ManagerRegister";
+import ManagerDashboard from "./pages/manager/ManagerDashboard";
 
 export default function App() {
   return (
@@ -36,6 +42,11 @@ export default function App() {
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/register" element={<AdminRegister />} />
         
+        {/* Manager Routes (no main layout) */}
+        <Route path="/manager/login" element={<ManagerLogin />} />
+        <Route path="/manager/register" element={<ManagerRegister />} />
+        <Route path="/manager/dashboard" element={<ManagerDashboard />} />
+        
         {/* Protected Admin Routes */}
         <Route 
           path="/admin/dashboard" 
@@ -52,6 +63,7 @@ export default function App() {
           <Route path="disaster-areas" element={<DisasterAreaManagement />} />
           <Route path="inventory" element={<InventoryManagement />} />
           <Route path="donations" element={<DonationManagement />} />
+          <Route path="manager-approval" element={<ManagerApproval />} />
         </Route>
       </Routes>
     </Router>

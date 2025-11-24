@@ -86,3 +86,89 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: 'Server error during login' });
   }
 };
+
+// Get pending managers
+exports.getPendingManagers = async (req, res) => {
+  try {
+    // Use concatenation for name to be safe if the generated column is missing
+    const query = `
+      SELECT managerid, fname, lname, (fname || ' ' || lname) as name, email, phoneno, district, 
+             certificatepath, createdat, status
+      FROM aidcentermanager
+      WHERE status = 'pending'
+      ORDER BY createdat DESC
+    `;
+    const result = await pool.query(query);
+
+    res.status(200).json({
+      managers: result.rows
+    });
+  } catch (error) {
+    console.error('Error fetching pending managers:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+// Approve manager
+exports.approveManager = async (req, res) => {
+  try {
+    const { managerId } = req.body;
+    const adminId = req.adminId; // From auth middleware
+
+    if (!managerId) {
+      return res.status(400).json({ error: 'Manager ID is required' });
+    }
+
+    const query = `
+      UPDATE aidcentermanager
+      SET status = 'approved', approvedby = $1, approvedat = NOW()
+      WHERE managerid = $2 AND status = 'pending'
+      RETURNING managerid, name, email
+    `;
+    const result = await pool.query(query, [adminId, managerId]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Manager not found or already processed' });
+    }
+
+    res.status(200).json({
+      message: 'Manager approved successfully',
+      manager: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Error approving manager:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+// Reject manager
+exports.rejectManager = async (req, res) => {
+  try {
+    const { managerId } = req.body;
+    const adminId = req.adminId;
+
+    if (!managerId) {
+      return res.status(400).json({ error: 'Manager ID is required' });
+    }
+
+    const query = `
+      UPDATE aidcentermanager
+      SET status = 'rejected', approvedby = $1, approvedat = NOW()
+      WHERE managerid = $2 AND status = 'pending'
+      RETURNING managerid, name, email
+    `;
+    const result = await pool.query(query, [adminId, managerId]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Manager not found or already processed' });
+    }
+
+    res.status(200).json({
+      message: 'Manager rejected',
+      manager: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Error rejecting manager:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};

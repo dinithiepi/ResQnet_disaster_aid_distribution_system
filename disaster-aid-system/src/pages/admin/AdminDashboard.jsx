@@ -59,6 +59,12 @@ function AdminDashboard() {
               💝 Donation Requests
             </button>
             <button 
+              onClick={() => navigate('/admin/dashboard/manager-approval')}
+              className="nav-item"
+            >
+              👤 Manager Approval
+            </button>
+            <button 
               onClick={() => navigate('/admin/dashboard/live-chat')}
               className="nav-item"
             >

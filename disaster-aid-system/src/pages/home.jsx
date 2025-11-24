@@ -40,6 +40,7 @@ function Home() {
               <div className="hero-buttons">
                 <a href="/donate" className="btn btn-primary">Donate Now</a>
                 <a href="/about" className="btn btn-secondary">Learn More</a>
+                <a href="/manager/login" className="btn btn-accent">Manager Portal</a>
               </div>
             </div>
           </div>
@@ -214,6 +215,7 @@ function Home() {
               <ul>
                 <li><a href="/map">Relief Centers</a></li>
                 <li><a href="/admin/login">Admin Login</a></li>
+                <li><a href="/manager/login">Manager Login</a></li>
               </ul>
             </div>
             

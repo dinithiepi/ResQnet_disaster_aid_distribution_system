@@ -1,18 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles.css';
 
 function ManagerDashboard() {
   const navigate = useNavigate();
   const [manager, setManager] = useState(null);
-  const [activeTab, setActiveTab] = useState('chat');
+  const [activeTab, setActiveTab] = useState('requests');
   const [inventory, setInventory] = useState([]);
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [conversations, setConversations] = useState([]);
-  const [selectedAdmin, setSelectedAdmin] = useState(null);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const messagesEndRef = useRef(null);
+  const [requests, setRequests] = useState([]);
+  const [itemCategory, setItemCategory] = useState('');
+  const [requestedQuantity, setRequestedQuantity] = useState('');
 
   useEffect(() => {
     const managerData = localStorage.getItem('managerData');
@@ -25,64 +22,30 @@ function ManagerDashboard() {
 
     if (managerData) {
       setManager(JSON.parse(managerData));
+      fetchProfile(); // Fetch fresh profile data
       fetchData();
     }
+  }, [navigate]);
 
-    const interval = setInterval(() => {
-      if (activeTab === 'chat') fetchConversations();
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [activeTab]);
-
-  useEffect(() => {
-    if (selectedAdmin) {
-      fetchMessages();
-    }
-  }, [selectedAdmin]);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  const fetchData = async () => {
-    fetchConversations();
-    fetchInventory();
-    fetchUnreadCount();
-  };
-
-  const fetchConversations = async () => {
+  const fetchProfile = async () => {
     try {
       const token = localStorage.getItem('managerToken');
-      const response = await fetch('http://localhost:4003/manager/chat/conversations', {
+      const response = await fetch('http://localhost:4003/manager/profile', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
         const data = await response.json();
-        setConversations(data.conversations);
-        if (!selectedAdmin && data.conversations.length > 0) {
-          setSelectedAdmin(data.conversations[0]);
-        }
+        setManager(data.manager);
+        localStorage.setItem('managerData', JSON.stringify(data.manager));
       }
     } catch (error) {
-      console.error('Fetch conversations error:', error);
+      console.error('Fetch profile error:', error);
     }
   };
 
-  const fetchMessages = async () => {
-    try {
-      const token = localStorage.getItem('managerToken');
-      const response = await fetch(
-        `http://localhost:4003/manager/chat/messages?userId=${selectedAdmin.other_id}&userType=${selectedAdmin.other_type}`,
-        { headers: { 'Authorization': `Bearer ${token}` } }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setMessages(data.messages);
-      }
-    } catch (error) {
-      console.error('Fetch messages error:', error);
-    }
+  const fetchData = () => {
+    fetchInventory();
+    fetchRequests();
   };
 
   const fetchInventory = async () => {
@@ -100,67 +63,81 @@ function ManagerDashboard() {
     }
   };
 
-  const fetchUnreadCount = async () => {
+  const fetchRequests = async () => {
     try {
       const token = localStorage.getItem('managerToken');
-      const response = await fetch('http://localhost:4003/manager/chat/unread-count', {
+      const response = await fetch('http://localhost:4003/manager/item-requests', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
         const data = await response.json();
-        setUnreadCount(data.unreadCount);
+        setRequests(data.requests);
       }
     } catch (error) {
-      console.error('Fetch unread count error:', error);
+      console.error('Fetch requests error:', error);
     }
   };
 
-  const handleSendMessage = async (e) => {
+  const handleSubmitRequest = async (e) => {
     e.preventDefault();
-    if (!newMessage.trim() || !selectedAdmin) return;
+    if (!itemCategory || !requestedQuantity) {
+      alert('Please fill all fields');
+      return;
+    }
 
     try {
       const token = localStorage.getItem('managerToken');
-      const response = await fetch('http://localhost:4003/manager/chat/send', {
+      const response = await fetch('http://localhost:4003/manager/item-requests', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({
-          receiverType: selectedAdmin.other_type,
-          receiverId: selectedAdmin.other_id,
-          message: newMessage
+        body: JSON.stringify({ 
+          itemcategory: itemCategory, 
+          requestedquantity: parseInt(requestedQuantity) 
         })
       });
 
       if (response.ok) {
-        setNewMessage('');
-        fetchMessages();
-        fetchConversations();
+        alert('Item request submitted successfully!');
+        setItemCategory('');
+        setRequestedQuantity('');
+        fetchRequests();
+      } else {
+        const error = await response.json();
+        alert(error.message || 'Failed to submit request');
       }
     } catch (error) {
-      console.error('Send message error:', error);
+      console.error('Submit request error:', error);
+      alert('Failed to submit request');
     }
   };
 
-  const handleUpdateInventory = async (itemcategory, quantity) => {
+  const handleMarkReceived = async (requestId) => {
+    if (!confirm('Mark this item as received?')) return;
+
     try {
       const token = localStorage.getItem('managerToken');
-      const response = await fetch('http://localhost:4003/manager/inventory/update', {
+      const response = await fetch('http://localhost:4003/manager/item-requests/received', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ itemcategory, quantity })
+        body: JSON.stringify({ requestId })
       });
 
       if (response.ok) {
-        fetchInventory();
+        alert('Item marked as received!');
+        fetchRequests();
+      } else {
+        const error = await response.json();
+        alert(error.message || 'Failed to mark as received');
       }
     } catch (error) {
-      console.error('Update inventory error:', error);
+      console.error('Mark received error:', error);
+      alert('Failed to mark as received');
     }
   };
 
@@ -170,17 +147,35 @@ function ManagerDashboard() {
     navigate('/manager/login');
   };
 
+  const getStatusBadge = (status) => {
+    const badges = {
+      pending: { text: 'Pending', className: 'status-badge-pending' },
+      approved: { text: 'Approved', className: 'status-badge-approved' },
+      rejected: { text: 'Rejected', className: 'status-badge-rejected' },
+      received: { text: 'Received', className: 'status-badge-received' }
+    };
+    const badge = badges[status] || badges.pending;
+    return <span className={`status-badge ${badge.className}`}>{badge.text}</span>;
+  };
+
   if (!manager) return <div className="loading">Loading...</div>;
 
   return (
     <div className="manager-dashboard">
       <nav className="dashboard-navbar">
         <div className="navbar-brand">
-          <h2>Aid Center Manager</h2>
+          <h2>Aid Center Manager Portal</h2>
         </div>
         <div className="navbar-user">
-          <span className="user-name">{manager.name}</span>
+          <span className="user-name">{manager.fname} {manager.lname}</span>
           <span className="user-district">{manager.district}</span>
+          {manager.centerid ? (
+            <span className="aid-center-badge">Center ID: {manager.centerid}</span>
+          ) : (
+            <span className="aid-center-badge not-assigned">No Center Assigned</span>
+          )}
+          <button onClick={fetchProfile} className="btn-refresh" title="Refresh profile">🔄</button>
+          <button onClick={() => navigate('/')} className="btn-home">🏠 Home</button>
           <button onClick={handleLogout} className="btn-logout">Logout</button>
         </div>
       </nav>
@@ -189,102 +184,129 @@ function ManagerDashboard() {
         <aside className="dashboard-sidebar">
           <div className="sidebar-menu">
             <button 
-              className={`menu-item ${activeTab === 'chat' ? 'active' : ''}`}
-              onClick={() => setActiveTab('chat')}
+              className={`menu-item ${activeTab === 'requests' ? 'active' : ''}`}
+              onClick={() => setActiveTab('requests')}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"/>
-              </svg>
-              <span>Live Chat</span>
-              {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
+              📋 Item Requests
             </button>
             
             <button 
               className={`menu-item ${activeTab === 'inventory' ? 'active' : ''}`}
               onClick={() => setActiveTab('inventory')}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 1 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-              </svg>
-              <span>Aid Center Inventory</span>
+              📦 Aid Center Inventory
             </button>
           </div>
         </aside>
 
         <main className="dashboard-content">
-          {activeTab === 'chat' && (
-            <div className="chat-section">
+          {activeTab === 'requests' && (
+            <div className="requests-section">
               <div className="section-header">
-                <h2>Live Chat with Admin</h2>
+                <h2>Request Items from Admin</h2>
               </div>
 
-              <div className="chat-container">
-                <div className="chat-sidebar">
-                  <h3>Conversations</h3>
-                  {conversations.length === 0 ? (
-                    <p className="empty-state">No conversations yet</p>
-                  ) : (
-                    conversations.map(conv => (
-                      <div
-                        key={`${conv.other_type}-${conv.other_id}`}
-                        className={`conversation-item ${selectedAdmin?.other_id === conv.other_id ? 'active' : ''}`}
-                        onClick={() => setSelectedAdmin(conv)}
-                      >
-                        <div className="conv-avatar">{conv.other_name?.charAt(0) || 'A'}</div>
-                        <div className="conv-info">
-                          <div className="conv-name">{conv.other_name || 'Admin'}</div>
-                        </div>
-                      </div>
-                    ))
-                  )}
+              {!manager.centerid ? (
+                <div className="alert alert-warning">
+                  <strong>⚠️ Not Assigned to Aid Center</strong>
+                  <p>You need to be assigned to an aid center by an admin before you can submit item requests.</p>
+                  <p>Click the refresh button (🔄) in the top right to check if you've been assigned.</p>
                 </div>
-
-                <div className="chat-main">
-                  {selectedAdmin ? (
-                    <>
-                      <div className="chat-header">
-                        <h3>{selectedAdmin.other_name || 'Admin'}</h3>
-                      </div>
-
-                      <div className="messages-area">
-                        {messages.length === 0 ? (
-                          <p className="empty-state">No messages yet. Start the conversation!</p>
-                        ) : (
-                          messages.map(msg => (
-                            <div
-                              key={msg.messageid}
-                              className={`message ${msg.sendertype === 'manager' ? 'sent' : 'received'}`}
-                            >
-                              <div className="message-bubble">
-                                <div className="message-sender">{msg.sender_name}</div>
-                                <div className="message-text">{msg.message}</div>
-                                <div className="message-time">
-                                  {new Date(msg.createdat).toLocaleTimeString()}
-                                </div>
-                              </div>
-                            </div>
-                          ))
-                        )}
-                        <div ref={messagesEndRef} />
-                      </div>
-
-                      <form onSubmit={handleSendMessage} className="chat-input">
-                        <input
-                          type="text"
-                          value={newMessage}
-                          onChange={(e) => setNewMessage(e.target.value)}
-                          placeholder="Type your message..."
-                        />
-                        <button type="submit" disabled={!newMessage.trim()}>
-                          Send
-                        </button>
-                      </form>
-                    </>
-                  ) : (
-                    <div className="empty-state">Select a conversation to start chatting</div>
-                  )}
-                </div>
+              ) : (
+                <div className="request-form-card">
+                  <h3>Submit New Request</h3>
+                  <form onSubmit={handleSubmitRequest} className="request-form">
+                  <div className="form-group">
+                    <label>Item Category *</label>
+                    <select
+                      className="form-control"
+                      value={itemCategory}
+                      onChange={(e) => setItemCategory(e.target.value)}
+                      required
+                    >
+                      <option value="">Select item category</option>
+                      <option value="Food">Food</option>
+                      <option value="Water">Water</option>
+                      <option value="Medicine">Medicine</option>
+                      <option value="Clothing">Clothing</option>
+                      <option value="Blankets">Blankets</option>
+                      <option value="Tents">Tents</option>
+                      <option value="Hygiene Kits">Hygiene Kits</option>
+                      <option value="First Aid">First Aid</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Requested Quantity *</label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      value={requestedQuantity}
+                      onChange={(e) => setRequestedQuantity(e.target.value)}
+                      min="1"
+                      required
+                    />
+                  </div>
+                  <button type="submit" className="btn-submit">
+                    Submit Request
+                  </button>
+                </form>
               </div>
+              )}
+
+              <div className="section-header">
+                <h2>My Requests</h2>
+              </div>
+
+              {requests.length === 0 ? (
+                <div className="empty-state-card">
+                  <div className="empty-icon">📦</div>
+                  <h3>No requests yet</h3>
+                  <p>Submit your first item request above</p>
+                </div>
+              ) : (
+                <div className="requests-table-container">
+                  <table className="requests-table">
+                    <thead>
+                      <tr>
+                        <th>Request ID</th>
+                        <th>Item Category</th>
+                        <th>Requested Qty</th>
+                        <th>Approved Qty</th>
+                        <th>Status</th>
+                        <th>Requested Date</th>
+                        <th>Remarks</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {requests.map(request => (
+                        <tr key={request.requestid}>
+                          <td>#{request.requestid}</td>
+                          <td>{request.itemcategory}</td>
+                          <td className="text-center">{request.requestedquantity}</td>
+                          <td className="text-center">
+                            {request.approvedquantity || '-'}
+                          </td>
+                          <td>{getStatusBadge(request.status)}</td>
+                          <td>{new Date(request.requestedat).toLocaleDateString()}</td>
+                          <td>{request.remarks || '-'}</td>
+                          <td>
+                            {request.status === 'approved' && (
+                              <button
+                                className="btn-receive"
+                                onClick={() => handleMarkReceived(request.requestid)}
+                              >
+                                Mark Received
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           )}
 
@@ -295,9 +317,10 @@ function ManagerDashboard() {
               </div>
 
               {inventory.length === 0 ? (
-                <div className="empty-state">
-                  <p>No inventory items found</p>
-                  <p className="text-muted">Contact admin to assign an aid center to your account</p>
+                <div className="empty-state-card">
+                  <div className="empty-icon">📦</div>
+                  <h3>No inventory items</h3>
+                  <p>Your aid center inventory will appear here</p>
                 </div>
               ) : (
                 <div className="inventory-grid">

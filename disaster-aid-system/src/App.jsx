@@ -13,11 +13,11 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import AdminRegister from "./pages/admin/AdminRegister";
 import AdminDashboardLayout from "./pages/admin/AdminDashboard";
 import DashboardOverview from "./pages/admin/DashboardOverview";
-import LiveChat from "./pages/admin/LiveChat";
 import DisasterAreaManagement from "./pages/admin/DisasterAreaManagement";
 import InventoryManagement from "./pages/admin/InventoryManagement";
 import DonationManagement from "./pages/admin/DonationManagement";
 import ManagerApproval from "./pages/admin/ManagerApproval";
+import ItemRequestManagement from "./pages/admin/ItemRequestManagement";
 
 // Import manager components
 import ManagerLogin from "./pages/manager/ManagerLogin";
@@ -59,11 +59,11 @@ export default function App() {
           {/* Nested routes - default to overview */}
           <Route index element={<DashboardOverview />} />
           <Route path="overview" element={<DashboardOverview />} />
-          <Route path="live-chat" element={<LiveChat />} />
           <Route path="disaster-areas" element={<DisasterAreaManagement />} />
           <Route path="inventory" element={<InventoryManagement />} />
           <Route path="donations" element={<DonationManagement />} />
           <Route path="manager-approval" element={<ManagerApproval />} />
+          <Route path="item-requests" element={<ItemRequestManagement />} />
         </Route>
       </Routes>
     </Router>

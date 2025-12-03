@@ -11,4 +11,9 @@ router.post('/login', managerController.login);
 // Protected routes
 router.get('/profile', verifyManagerToken, managerController.getProfile);
 
+// Item request routes
+router.post('/item-requests', verifyManagerToken, managerController.createItemRequest);
+router.get('/item-requests', verifyManagerToken, managerController.getItemRequests);
+router.post('/item-requests/received', verifyManagerToken, managerController.markItemReceived);
+
 module.exports = router;

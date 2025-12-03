@@ -32,6 +32,10 @@ function ManagerApproval() {
   };
 
   const handleApprove = async (managerId) => {
+    if (!confirm('Approve this manager? A new aid center will be automatically created.')) {
+      return;
+    }
+
     try {
       const token = localStorage.getItem('adminToken');
       const response = await fetch('http://localhost:4002/api/admin/managers/approve', {
@@ -44,7 +48,8 @@ function ManagerApproval() {
       });
 
       if (response.ok) {
-        alert('Manager approved successfully!');
+        const data = await response.json();
+        alert(`Manager approved! Assigned to Aid Center ID: ${data.center.centerid}`);
         fetchPendingManagers();
       } else {
         const error = await response.json();
@@ -131,6 +136,12 @@ function ManagerApproval() {
                   <span className="detail-label">Registered:</span>
                   <span className="detail-value">
                     {new Date(manager.createdat).toLocaleDateString()}
+                  </span>
+                </div>
+                <div className="detail-row">
+                  <span className="detail-label">Aid Center:</span>
+                  <span className="detail-value">
+                    <span className="badge badge-info">Auto-assigned on approval</span>
                   </span>
                 </div>
                 <div className="detail-row">

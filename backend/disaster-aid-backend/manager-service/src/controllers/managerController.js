@@ -113,3 +113,97 @@ exports.getProfile = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch profile' });
   }
 };
+
+// Create item request
+exports.createItemRequest = async (req, res) => {
+  try {
+    const { itemcategory, requestedquantity } = req.body;
+    const managerId = req.manager.managerid;
+
+    if (!itemcategory || !requestedquantity) {
+      return res.status(400).json({ message: 'Item category and quantity are required' });
+    }
+
+    // Get manager's center ID
+    const managerQuery = 'SELECT centerid FROM aidcentermanager WHERE managerid = $1';
+    const managerResult = await pool.query(managerQuery, [managerId]);
+
+    if (managerResult.rows.length === 0 || !managerResult.rows[0].centerid) {
+      return res.status(400).json({ message: 'Manager not assigned to an aid center' });
+    }
+
+    const centerid = managerResult.rows[0].centerid;
+
+    const insertQuery = `
+      INSERT INTO itemrequest (managerid, centerid, itemcategory, requestedquantity)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *
+    `;
+    const result = await pool.query(insertQuery, [managerId, centerid, itemcategory, requestedquantity]);
+
+    res.status(201).json({
+      message: 'Item request submitted successfully',
+      request: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Create item request error:', error);
+    res.status(500).json({ message: 'Failed to create item request' });
+  }
+};
+
+// Get manager's item requests
+exports.getItemRequests = async (req, res) => {
+  try {
+    const managerId = req.manager.managerid;
+
+    const query = `
+      SELECT 
+        ir.*,
+        ac.location as center_location,
+        ac.district as center_district
+      FROM itemrequest ir
+      JOIN aidcenter ac ON ir.centerid = ac.centerid
+      WHERE ir.managerid = $1
+      ORDER BY ir.requestedat DESC
+    `;
+    const result = await pool.query(query, [managerId]);
+
+    res.json({ requests: result.rows });
+  } catch (error) {
+    console.error('Get item requests error:', error);
+    res.status(500).json({ message: 'Failed to fetch item requests' });
+  }
+};
+
+// Mark item as received
+exports.markItemReceived = async (req, res) => {
+  try {
+    const { requestId } = req.body;
+    const managerId = req.manager.managerid;
+
+    if (!requestId) {
+      return res.status(400).json({ message: 'Request ID is required' });
+    }
+
+    const query = `
+      UPDATE itemrequest
+      SET status = 'received', receivedat = NOW()
+      WHERE requestid = $1 AND managerid = $2 AND status = 'approved'
+      RETURNING *
+    `;
+    const result = await pool.query(query, [requestId, managerId]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Request not found or not approved' });
+    }
+
+    res.json({
+      message: 'Item marked as received',
+      request: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Mark item received error:', error);
+    res.status(500).json({ message: 'Failed to mark item as received' });
+  }
+};
+

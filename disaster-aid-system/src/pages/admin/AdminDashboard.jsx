@@ -65,14 +65,14 @@ function AdminDashboard() {
               👤 Manager Approval
             </button>
             <button 
-              onClick={() => navigate('/admin/dashboard/live-chat')}
+              onClick={() => navigate('/admin/dashboard/item-requests')}
               className="nav-item"
             >
-              💬 Live Chat
+              📋 Item Requests
             </button>
             <button 
               onClick={() => navigate('/')}
-              className="nav-item"
+              className="nav-item home-btn"
             >
               🏠 Back to Home
             </button>

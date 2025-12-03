@@ -4,7 +4,6 @@ const path = require('path');
 require('dotenv').config();
 
 const managerRoutes = require('./routes/managerRoutes');
-const chatRoutes = require('./routes/chatRoutes');
 const inventoryRoutes = require('./routes/inventoryRoutes');
 
 const app = express();
@@ -20,7 +19,6 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Routes
 app.use('/manager', managerRoutes);
-app.use('/manager/chat', chatRoutes);
 app.use('/manager/inventory', inventoryRoutes);
 
 // Health check

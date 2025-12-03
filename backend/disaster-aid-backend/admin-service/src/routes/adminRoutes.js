@@ -30,4 +30,12 @@ router.get('/managers/pending', authMiddleware, adminController.getPendingManage
 router.post('/managers/approve', authMiddleware, adminController.approveManager);
 router.post('/managers/reject', authMiddleware, adminController.rejectManager);
 
+// Aid centers
+router.get('/aidcenters', authMiddleware, adminController.getAidCenters);
+
+// Item request routes
+router.get('/item-requests', authMiddleware, adminController.getItemRequests);
+router.post('/item-requests/approve', authMiddleware, adminController.approveItemRequest);
+router.post('/item-requests/reject', authMiddleware, adminController.rejectItemRequest);
+
 module.exports = router;

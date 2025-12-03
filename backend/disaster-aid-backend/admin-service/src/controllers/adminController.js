@@ -256,37 +256,113 @@ exports.getItemRequests = async (req, res) => {
 
 // Approve item request
 exports.approveItemRequest = async (req, res) => {
+  const client = await pool.connect();
   try {
     const { requestId, approvedQuantity, remarks } = req.body;
     const adminId = req.adminId;
+
+    console.log('=== APPROVING ITEM REQUEST ===');
+    console.log('Request ID:', requestId);
+    console.log('Approved Quantity:', approvedQuantity);
+    console.log('Admin ID:', adminId);
 
     if (!requestId || !approvedQuantity) {
       return res.status(400).json({ error: 'Request ID and approved quantity are required' });
     }
 
-    const query = `
+    await client.query('BEGIN');
+    console.log('Transaction started');
+
+    // Get request details
+    const requestQuery = 'SELECT * FROM itemrequest WHERE requestid = $1';
+    const requestResult = await client.query(requestQuery, [requestId]);
+    
+    if (requestResult.rows.length === 0) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ error: 'Request not found' });
+    }
+
+    const request = requestResult.rows[0];
+    const itemCategory = request.itemcategory;
+    const centerId = request.centerid;
+
+    console.log('Request details:', { itemCategory, centerId, managerId: request.managerid });
+
+    // Check admin inventory
+    const inventoryCheck = await client.query(
+      'SELECT * FROM inventory WHERE LOWER(itemcategory) = LOWER($1)',
+      [itemCategory]
+    );
+
+    console.log('Admin inventory check:', inventoryCheck.rows[0]);
+
+    if (inventoryCheck.rows.length === 0 || inventoryCheck.rows[0].quantity < approvedQuantity) {
+      await client.query('ROLLBACK');
+      const available = inventoryCheck.rows[0]?.quantity || 0;
+      console.log(`INSUFFICIENT INVENTORY - Available: ${available}, Requested: ${approvedQuantity}`);
+      return res.status(400).json({ 
+        error: `Insufficient inventory. Available: ${available}, Requested: ${approvedQuantity}` 
+      });
+    }
+
+    // Update item request status
+    const updateRequestQuery = `
       UPDATE itemrequest
       SET status = 'approved', 
           approvedquantity = $1, 
           remarks = $2,
           reviewedby = $3, 
           reviewedat = NOW()
-      WHERE requestid = $4 AND status = 'pending'
+      WHERE requestid = $4
       RETURNING *
     `;
-    const result = await pool.query(query, [approvedQuantity, remarks, adminId, requestId]);
+    const result = await client.query(updateRequestQuery, [approvedQuantity, remarks, adminId, requestId]);
+    console.log('✓ Request status updated to approved');
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Request not found or already processed' });
+    // Deduct from admin inventory
+    const deductResult = await client.query(
+      'UPDATE inventory SET quantity = quantity - $1 WHERE LOWER(itemcategory) = LOWER($2) RETURNING *',
+      [approvedQuantity, itemCategory]
+    );
+    console.log('✓ Admin inventory updated:', deductResult.rows[0]);
+
+    // Add to aid center inventory
+    const centerInventoryCheck = await client.query(
+      'SELECT * FROM aidcenterinventory WHERE centerid = $1 AND LOWER(itemcategory) = LOWER($2)',
+      [centerId, itemCategory]
+    );
+
+    if (centerInventoryCheck.rows.length === 0) {
+      // Create new entry
+      const insertResult = await client.query(
+        'INSERT INTO aidcenterinventory (centerid, itemcategory, quantity) VALUES ($1, $2, $3) RETURNING *',
+        [centerId, itemCategory, approvedQuantity]
+      );
+      console.log('✓ Center inventory created:', insertResult.rows[0]);
+    } else {
+      // Update existing entry
+      const updateResult = await client.query(
+        'UPDATE aidcenterinventory SET quantity = quantity + $1, lastupdated = NOW() WHERE centerid = $2 AND LOWER(itemcategory) = LOWER($3) RETURNING *',
+        [approvedQuantity, centerId, itemCategory]
+      );
+      console.log('✓ Center inventory updated:', updateResult.rows[0]);
     }
 
+    await client.query('COMMIT');
+    console.log('✓ Transaction committed successfully');
+    console.log('=== APPROVAL COMPLETE ===\n');
+
     res.status(200).json({
-      message: 'Item request approved successfully',
+      message: 'Item request approved and inventory updated successfully',
       request: result.rows[0]
     });
   } catch (error) {
-    console.error('Error approving item request:', error);
-    res.status(500).json({ error: 'Server error' });
+    await client.query('ROLLBACK');
+    console.error('✗ Error approving item request:', error);
+    console.error('✗ Transaction rolled back');
+    res.status(500).json({ error: 'Server error: ' + error.message });
+  } finally {
+    client.release();
   }
 };
 

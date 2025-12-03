@@ -98,15 +98,15 @@ function Home() {
         <div className="section-container">
           <div className="stats-grid">
             <div className="stat-card">
-              <div className="stat-number">500+</div>
+              <div className="stat-number">100+</div>
               <div className="stat-label">Relief Centers</div>
             </div>
             <div className="stat-card">
-              <div className="stat-number">10K+</div>
+              <div className="stat-number">100+</div>
               <div className="stat-label">Donations Tracked</div>
             </div>
             <div className="stat-card">
-              <div className="stat-number">50K+</div>
+              <div className="stat-number">500+</div>
               <div className="stat-label">People Helped</div>
             </div>
             <div className="stat-card">

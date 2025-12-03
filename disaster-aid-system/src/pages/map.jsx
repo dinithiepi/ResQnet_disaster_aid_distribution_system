@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles.css";
 
 // Fix missing default marker icons in Leaflet build tools
@@ -15,17 +15,109 @@ L.Icon.Default.mergeOptions({
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-export default function MapPage() {
-  // Example static data (can be replaced with data from your database)
-  const [disasters] = useState([
-    { id: 1, name: "Flood - Galle", position: [6.0535, 80.221], type: "disaster" },
-    { id: 2, name: "Landslide - Kandy", position: [7.2936, 80.635], type: "disaster" },
-  ]);
+// Sri Lankan district coordinates mapping
+const SRI_LANKA_DISTRICTS = {
+  'colombo': [6.9271, 79.8612],
+  'gampaha': [7.0840, 80.0098],
+  'kalutara': [6.5854, 79.9607],
+  'kandy': [7.2906, 80.6337],
+  'matale': [7.4675, 80.6234],
+  'nuwara eliya': [6.9497, 80.7891],
+  'galle': [6.0535, 80.2210],
+  'matara': [5.9549, 80.5550],
+  'hambantota': [6.1429, 81.1212],
+  'jaffna': [9.6615, 80.0255],
+  'kilinochchi': [9.3806, 80.3978],
+  'mannar': [8.9810, 79.9044],
+  'vavuniya': [8.7542, 80.4982],
+  'mullaitivu': [9.2671, 80.8142],
+  'batticaloa': [7.7310, 81.6747],
+  'ampara': [7.2918, 81.6747],
+  'trincomalee': [8.5874, 81.2152],
+  'kurunegala': [7.4818, 80.3609],
+  'puttalam': [8.0362, 79.8283],
+  'anuradhapura': [8.3114, 80.4037],
+  'polonnaruwa': [7.9403, 81.0188],
+  'badulla': [6.9934, 81.0550],
+  'monaragala': [6.8728, 81.3507],
+  'ratnapura': [6.7056, 80.3847],
+  'kegalle': [7.2513, 80.3464]
+};
 
-  const [aidCenters] = useState([
-    { id: 1, name: "Aid Center - Colombo", position: [6.9271, 79.8612], type: "aid" },
-    { id: 2, name: "Aid Center - Jaffna", position: [9.6615, 80.0255], type: "aid" },
-  ]);
+export default function MapPage() {
+  const [disasters, setDisasters] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchDisasterAreas();
+  }, []);
+
+  const fetchDisasterAreas = async () => {
+    try {
+      console.log('🔍 Attempting to fetch disaster areas from http://localhost:4001/api/disaster-areas');
+      const response = await fetch('http://localhost:4001/api/disaster-areas');
+      console.log('✅ Fetch response status:', response.status, response.statusText);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('📦 Disaster areas raw data:', data);
+        
+        // The API returns an array directly, not wrapped in an object
+        const areas = Array.isArray(data) ? data : [];
+        console.log('📊 Number of areas found:', areas.length);
+        
+        if (areas.length === 0) {
+          console.warn('⚠️ No disaster areas found in database. Admin needs to add disaster areas.');
+        }
+        
+        // Map disaster areas to coordinates
+        const mappedDisasters = areas.map(area => {
+          const district = (area.location || area.district || '').toLowerCase().trim();
+          const coords = SRI_LANKA_DISTRICTS[district] || [7.8731, 80.7718]; // Default to center of SL
+          console.log(`📍 Mapping "${area.areaname}" in ${area.location || area.district} (${district}) to`, coords);
+          return {
+            id: area.areaid,
+            name: area.areaname || `${area.location} Disaster Area`,
+            district: area.location || area.district,
+            severity: area.severity,
+            affectedPopulation: area.affectedpopulation,
+            description: area.description,
+            position: coords,
+            type: 'disaster'
+          };
+        });
+        console.log('✅ Successfully mapped disasters:', mappedDisasters);
+        setDisasters(mappedDisasters);
+      } else {
+        const errorText = await response.text();
+        console.error('❌ Failed to fetch disaster areas:', response.status, errorText);
+        alert(`Failed to load disaster areas. Status: ${response.status}. Make sure gateway service is running on port 4001.`);
+      }
+    } catch (error) {
+      console.error('❌ Error fetching disaster areas:', error);
+      alert(`Cannot connect to gateway service. Please ensure the backend service is running on port 4001.\n\nError: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="page-root">
+        <header className="top-bar">
+          <div className="brand">ResQNet</div>
+          <nav className="top-nav" aria-label="Main navigation">
+            <a href="/">Home</a>
+            <a href="/donate">Donate</a>
+            <a href="/inventory">Inventory</a>
+            <a href="/about">About</a>
+          </nav>
+        </header>
+        <main className="container">
+          <div className="loading">Loading map data...</div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="page-root">
@@ -42,10 +134,10 @@ export default function MapPage() {
 
       {/* 🔹 Map Content */}
       <main className="container map-page">
-        <h2>Disaster & Aid Center Map - Sri Lanka</h2>
+        <h2>Disaster Areas Map - Sri Lanka</h2>
         <p>
-          View real-time locations of affected disaster areas and active aid centers across Sri Lanka.
-          Each marker represents a disaster location or a registered relief center.
+          View real-time locations of affected disaster areas across Sri Lanka.
+          {disasters.length > 0 && ` Currently tracking ${disasters.length} active disaster area(s).`}
         </p>
 
         <MapContainer
@@ -61,35 +153,35 @@ export default function MapPage() {
           {/* Disaster markers in red */}
           {disasters.map((loc) => (
             <Marker
-              key={loc.id}
+              key={`disaster-${loc.id}`}
               position={loc.position}
               icon={L.icon({
-                iconUrl: "https://cdn-icons-png.flaticon.com/512/535/535239.png",
-                iconSize: [30, 30],
+                iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
+                shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
               })}
             >
               <Popup>
                 <b>{loc.name}</b>
                 <br />
-                Status: Disaster Location
-              </Popup>
-            </Marker>
-          ))}
-
-          {/* Aid center markers in green */}
-          {aidCenters.map((center) => (
-            <Marker
-              key={center.id}
-              position={center.position}
-              icon={L.icon({
-                iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
-                iconSize: [30, 30],
-              })}
-            >
-              <Popup>
-                <b>{center.name}</b>
+                District: {loc.district}
                 <br />
-                Type: Aid Center
+                Severity: {loc.severity}
+                {loc.affectedPopulation > 0 && (
+                  <>
+                    <br />
+                    Affected Population: {loc.affectedPopulation}
+                  </>
+                )}
+                {loc.description && (
+                  <>
+                    <br />
+                    {loc.description}
+                  </>
+                )}
               </Popup>
             </Marker>
           ))}
@@ -99,19 +191,12 @@ export default function MapPage() {
           <h4>Legend</h4>
           <p>
             <img
-              src="https://cdn-icons-png.flaticon.com/512/535/535239.png"
+              src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png"
               alt="Disaster"
-              width="18"
+              width="15"
+              height="24"
             />{" "}
-            Disaster Location
-          </p>
-          <p>
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/684/684908.png"
-              alt="Aid Center"
-              width="18"
-            />{" "}
-            Aid Center
+            Disaster Area ({disasters.length})
           </p>
         </div>
       </main>

@@ -86,7 +86,7 @@ function ManagerRegister() {
       data.append('district', formData.district);
       data.append('certificate', certificate);
 
-      const response = await fetch('http://localhost:4000/manager/register', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/manager/register`, {
         method: 'POST',
         body: data
       });

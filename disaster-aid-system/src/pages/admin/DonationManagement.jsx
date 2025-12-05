@@ -15,8 +15,8 @@ export default function DonationManagement() {
     setLoading(true);
     try {
       const endpoint = activeTab === 'pending' 
-        ? 'http://localhost:4001/inventory/donations/pending'
-        : 'http://localhost:4001/inventory/donations';
+        ? `${process.env.REACT_APP_API_URL}/inventory/donations/pending`
+        : `${process.env.REACT_APP_API_URL}/inventory/donations`;
       
       const response = await fetch(endpoint);
       const data = await response.json();
@@ -35,7 +35,7 @@ export default function DonationManagement() {
 
   const handleStatusUpdate = async (donationId, newStatus, adminNotes = '') => {
     try {
-      const response = await fetch(`http://localhost:4001/inventory/donations/${donationId}/status`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/donations/${donationId}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus, adminNotes })

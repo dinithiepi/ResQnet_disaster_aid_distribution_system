@@ -54,8 +54,8 @@ export default function MapPage() {
 
   const fetchDisasterAreas = async () => {
     try {
-      console.log('🔍 Attempting to fetch disaster areas from http://localhost:4001/api/disaster-areas');
-      const response = await fetch('http://localhost:4001/api/disaster-areas');
+      console.log(`🔍 Attempting to fetch disaster areas from ${process.env.REACT_APP_API_URL}/api/disaster-areas`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/disaster-areas`);
       console.log('✅ Fetch response status:', response.status, response.statusText);
       if (response.ok) {
         const data = await response.json();

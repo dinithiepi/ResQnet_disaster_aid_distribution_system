@@ -4,9 +4,9 @@ require('dotenv').config();
 
 const pool = new Pool({
   user: process.env.PGUSER || 'postgres',
-  host: process.env.PGHOST || 'localhost',
-  database: process.env.PGDATABASE || 'disasteraiddb',
-  password: process.env.PGPASSWORD || 'xxxx',
+  host: process.env.PGHOST || 'postgres.railway.internal',
+  database: process.env.PGDATABASE || 'railway',
+  password: process.env.PGPASSWORD || 'ipkonCFWFmnviyjFyMJbkNmKjHJIfmZw',
   port: process.env.PGPORT || 5432,
 });
 

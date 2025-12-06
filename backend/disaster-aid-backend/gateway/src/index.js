@@ -24,27 +24,36 @@ app.use(cors());
 // Proxy routes
 // ---------------------------
 
+// Service targets (use deploy URLs via env vars, fallback to localhost for local dev)
+const INVENTORY_URL = process.env.INVENTORY_SERVICE_URL || process.env.INVENTORY_SERVICE_HOST || 'http://localhost:4001';
+const ADMIN_URL = process.env.ADMIN_SERVICE_URL || process.env.ADMIN_SERVICE_HOST || 'http://localhost:4002';
+const MANAGER_URL = process.env.MANAGER_SERVICE_URL || process.env.MANAGER_SERVICE_HOST || 'http://localhost:4003';
+
 // Forward requests to the inventory service
 app.use('/inventory', createProxyMiddleware({
-    target: 'http://localhost:4001', // inventory microservice
+    target: INVENTORY_URL,
     changeOrigin: true,
-    pathRewrite: (path, req) => req.originalUrl.replace(/^\/inventory/, '/inventory')
+    pathRewrite: {
+        '^/inventory': '', // /inventory/foo -> /foo at inventory service
+    },
 }));
 
 // Forward requests to the admin service
 app.use('/admin', createProxyMiddleware({
-    target: 'http://localhost:4002', // admin microservice
+    target: ADMIN_URL,
     changeOrigin: true,
     pathRewrite: {
-        '^/admin': '/api/admin', // rewrite path
+        '^/admin': '', // strip prefix; set to '/api/admin' if admin expects that base
     },
 }));
 
 // Forward requests to the manager service
 app.use('/manager', createProxyMiddleware({
-    target: 'http://localhost:4003', // manager microservice
+    target: MANAGER_URL,
     changeOrigin: true,
-    pathRewrite: (path, req) => req.originalUrl.replace(/^\/manager/, '/manager')
+    pathRewrite: {
+        '^/manager': '',
+    },
 }));
 
 // ---------------------------

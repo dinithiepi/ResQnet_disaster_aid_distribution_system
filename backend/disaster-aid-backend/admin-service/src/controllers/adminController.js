@@ -12,7 +12,7 @@ exports.register = async (req, res) => {
     }
 
     // Check if admin already exists
-    const checkQuery = 'SELECT * FROM admin WHERE email = $1';
+    const checkQuery = 'SELECT * FROM admin1 WHERE email = $1';
     const existingAdmin = await pool.query(checkQuery, [email]);
 
     if (existingAdmin.rows.length > 0) {
@@ -25,7 +25,7 @@ exports.register = async (req, res) => {
 
     // Insert new admin
     const insertQuery = `
-      INSERT INTO admin (name, email, password, phoneno)
+      INSERT INTO admin1 (name, email, password, phoneno)
       VALUES ($1, $2, $3, $4)
       RETURNING adminid, name, email, phoneno
     `;
@@ -52,7 +52,7 @@ exports.login = async (req, res) => {
     }
 
     // Find admin by email
-    const query = 'SELECT * FROM admin WHERE email = $1';
+    const query = 'SELECT * FROM admin1 WHERE email = $1';
     const result = await pool.query(query, [email]);
 
     if (result.rows.length === 0) {

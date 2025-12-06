@@ -1,4 +1,4 @@
-const pool = require('../../../db/db.js');
+const pool = require('../db');
 
 // ==============================
 // GET ALL DISASTER AREAS

@@ -7,6 +7,7 @@
     "start": "node gateway/src/index.js",
     "dev": "nodemon gateway/src/index.js",
     "postinstall": "npm --prefix gateway install && npm --prefix admin-service install && npm --prefix inventory-service install && npm --prefix manager-service install",
+    "migrate": "node scripts/migrate.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

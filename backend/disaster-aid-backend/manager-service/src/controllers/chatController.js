@@ -1,4 +1,4 @@
-const pool = require('../../../db/db');
+const pool = require('../db');
 
 // Send Message
 exports.sendMessage = async (req, res) => {

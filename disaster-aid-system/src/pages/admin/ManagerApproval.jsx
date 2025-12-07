@@ -64,7 +64,7 @@ function ManagerApproval() {
   const handleReject = async (managerId) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/managers/reject`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/managers/reject`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ function ManagerApproval() {
   };
 
   const viewCertificate = (certificatePath) => {
-    const baseUrl = `${process.env.REACT_APP_API_URL}`;
+    const baseUrl = `${import.meta.env.VITE_API_URL}`;
     const normalizedPath = certificatePath.startsWith('/') ? certificatePath : `/${certificatePath}`;
     setSelectedCertificate(`${baseUrl}${normalizedPath}`);
   };

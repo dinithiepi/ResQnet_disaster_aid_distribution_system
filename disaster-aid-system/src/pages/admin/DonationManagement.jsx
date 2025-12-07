@@ -15,8 +15,8 @@ export default function DonationManagement() {
     setLoading(true);
     try {
       const endpoint = activeTab === 'pending' 
-        ? `${process.env.REACT_APP_API_URL}/inventory/donations/pending`
-        : `${process.env.REACT_APP_API_URL}/inventory/donations`;
+        ? `${import.meta.env.VITE_API_URL}/inventory/donations/pending`
+        : `${import.meta.env.VITE_API_URL}/inventory/donations`;
       
       const response = await fetch(endpoint);
       const data = await response.json();

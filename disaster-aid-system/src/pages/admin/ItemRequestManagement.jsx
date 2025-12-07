@@ -16,7 +16,7 @@ function ItemRequestManagement() {
   const fetchItemRequests = async () => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/item-requests`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/item-requests`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -38,7 +38,7 @@ function ItemRequestManagement() {
 
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/item-requests/approve`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/item-requests/approve`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ function ItemRequestManagement() {
 
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/item-requests/reject`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/item-requests/reject`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

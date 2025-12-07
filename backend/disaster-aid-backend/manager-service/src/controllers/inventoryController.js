@@ -4,7 +4,7 @@ const pool = require('../db');
 exports.getInventory = async (req, res) => {
   try {
     // Get manager's center
-    const managerQuery = 'SELECT centerid FROM aidcentermanager WHERE managerid = $1';
+    const managerQuery = 'SELECT centerid FROM aidcentermanager1 WHERE managerid = $1';
     const managerResult = await pool.query(managerQuery, [req.manager.managerid]);
     
     if (!managerResult.rows[0] || !managerResult.rows[0].centerid) {
@@ -32,7 +32,7 @@ exports.updateInventory = async (req, res) => {
   try {
     const { itemcategory, quantity } = req.body;
     
-    const managerQuery = 'SELECT centerid FROM aidcentermanager WHERE managerid = $1';
+    const managerQuery = 'SELECT centerid FROM aidcentermanager1 WHERE managerid = $1';
     const managerResult = await pool.query(managerQuery, [req.manager.managerid]);
     
     if (!managerResult.rows[0] || !managerResult.rows[0].centerid) {

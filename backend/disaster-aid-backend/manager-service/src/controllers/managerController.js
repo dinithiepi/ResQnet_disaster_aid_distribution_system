@@ -17,7 +17,7 @@ exports.register = async (req, res) => {
     }
 
     // Check if manager exists
-    const checkQuery = 'SELECT * FROM aidcentermanager WHERE email = $1';
+    const checkQuery = 'SELECT * FROM aidcentermanager1 WHERE email = $1';
     const existing = await pool.query(checkQuery, [email]);
 
     if (existing.rows.length > 0) {
@@ -31,7 +31,7 @@ exports.register = async (req, res) => {
 
     // Insert manager
     const insertQuery = `
-      INSERT INTO aidcentermanager 
+      INSERT INTO aidcentermanager1 
       (fname, lname, email, password, phoneno, district, certificatepath, status)
       VALUES ($1, $2, $3, $4, $5, $6, $7, 'pending')
       RETURNING managerid, fname, lname, email, district, status
@@ -57,7 +57,7 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const query = 'SELECT * FROM aidcentermanager WHERE email = $1';
+    const query = 'SELECT * FROM aidcentermanager1 WHERE email = $1';
     const result = await pool.query(query, [email]);
 
     if (result.rows.length === 0) {
@@ -96,7 +96,7 @@ exports.getProfile = async (req, res) => {
   try {
     const query = `
       SELECT m.*, c.location, c.district as center_district
-      FROM aidcentermanager m
+      FROM aidcentermanager1 m
       LEFT JOIN aidcenter c ON m.centerid = c.centerid
       WHERE m.managerid = $1
     `;
@@ -125,7 +125,7 @@ exports.createItemRequest = async (req, res) => {
     }
 
     // Get manager's center ID
-    const managerQuery = 'SELECT centerid FROM aidcentermanager WHERE managerid = $1';
+    const managerQuery = 'SELECT centerid FROM aidcentermanager1 WHERE managerid = $1';
     const managerResult = await pool.query(managerQuery, [managerId]);
 
     if (managerResult.rows.length === 0 || !managerResult.rows[0].centerid) {

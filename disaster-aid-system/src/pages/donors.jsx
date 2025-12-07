@@ -20,7 +20,7 @@ export default function Donors() {
     setSubmitStatus('submitting');
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/inventory/donations/submit`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/inventory/donations/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

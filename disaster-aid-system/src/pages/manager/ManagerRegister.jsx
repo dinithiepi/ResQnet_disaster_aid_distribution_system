@@ -86,7 +86,7 @@ function ManagerRegister() {
       data.append('district', formData.district);
       data.append('certificate', certificate);
 
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/manager/register`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/manager/register`, {
         method: 'POST',
         body: data
       });

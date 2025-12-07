@@ -9,8 +9,8 @@ export default function Inventory() {
   useEffect(() => {
     // Fetch inventory data
     Promise.all([
-      fetch(`${process.env.REACT_APP_API_URL}/inventory`).then(res => res.json()),
-      fetch(`${process.env.REACT_APP_API_URL}/inventory/donations`).then(res => res.json())
+      fetch(`${import.meta.env.VITE_API_URL}/inventory`).then(res => res.json()),
+      fetch(`${import.meta.env.VITE_API_URL}/inventory/donations`).then(res => res.json())
     ])
       .then(([inventoryData, donationsData]) => {
         setInventory(inventoryData);

@@ -18,10 +18,18 @@ const storage = multer.diskStorage({
   }
 });
 
+// Correct file filter
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = /jpeg|jpg|png|pdf/;
-  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = allowedTypes.test(file.mimetype);
+  const allowedExtensions = /jpeg|jpg|png|pdf/;
+  const allowedMimeTypes = [
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'application/pdf'
+  ];
+
+  const extname = allowedExtensions.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = allowedMimeTypes.includes(file.mimetype);
 
   if (extname && mimetype) {
     return cb(null, true);

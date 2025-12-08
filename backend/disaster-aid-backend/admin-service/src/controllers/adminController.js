@@ -1,4 +1,4 @@
-const pool = require('../db');
+const pool = require('../../../db/db');
 const bcrypt = require('bcrypt');
 
 // Admin Registration

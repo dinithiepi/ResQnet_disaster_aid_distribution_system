@@ -16,10 +16,10 @@ function DashboardOverview() {
   const fetchStats = async () => {
     try {
       const [areasRes, inventoryRes, donationsRes, pendingRes] = await Promise.all([
-        fetch(`${process.env.REACT_APP_API_URL}/api/disaster-areas`),
-        fetch(`${process.env.REACT_APP_API_URL}/api/inventory`),
-        fetch(`${process.env.REACT_APP_API_URL}/api/inventory/donations`),
-        fetch(`${process.env.REACT_APP_API_URL}/api/inventory/donations/pending`)
+        fetch('http://localhost:4001/api/disaster-areas'),
+        fetch('http://localhost:4001/api/inventory'),
+        fetch('http://localhost:4001/inventory/donations'),
+        fetch('http://localhost:4001/inventory/donations/pending')
       ]);
 
       const areas = await areasRes.json();

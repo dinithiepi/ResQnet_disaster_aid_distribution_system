@@ -20,7 +20,7 @@ function InventoryManagement() {
 
   const fetchInventory = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/inventory`);
+      const response = await fetch('http://localhost:4001/api/inventory');
       const data = await response.json();
       setInventory(data);
     } catch (error) {
@@ -70,8 +70,8 @@ function InventoryManagement() {
     
     try {
       const url = editingItem
-        ? `${process.env.REACT_APP_API_URL}/api/inventory/${editingItem.itemid}`
-        : `${process.env.REACT_APP_API_URL}/api/inventory`;
+        ? `http://localhost:4001/api/inventory/${editingItem.itemid}`
+        : 'http://localhost:4001/api/inventory';
       
       const method = editingItem ? 'PUT' : 'POST';
 
@@ -112,7 +112,7 @@ function InventoryManagement() {
     }
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/inventory/${itemid}`, {
+      const response = await fetch(`http://localhost:4001/api/inventory/${itemid}`, {
         method: 'DELETE',
       });
 

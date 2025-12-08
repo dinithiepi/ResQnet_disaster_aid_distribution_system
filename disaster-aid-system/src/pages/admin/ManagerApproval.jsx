@@ -14,7 +14,7 @@ function ManagerApproval() {
     try {
       const token = localStorage.getItem('adminToken');
       // Direct call to admin service to avoid gateway issues
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/managers/pending`, {
+      const response = await fetch('http://localhost:4002/api/admin/managers/pending', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -38,7 +38,7 @@ function ManagerApproval() {
 
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/managers/approve`, {
+      const response = await fetch('http://localhost:4002/api/admin/managers/approve', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ function ManagerApproval() {
   const handleReject = async (managerId) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/managers/reject`, {
+      const response = await fetch('http://localhost:4002/api/admin/managers/reject', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ function ManagerApproval() {
   };
 
   const viewCertificate = (certificatePath) => {
-    const baseUrl = `${process.env.REACT_APP_API_URL}`;
+    const baseUrl = 'http://localhost:4003';
     const normalizedPath = certificatePath.startsWith('/') ? certificatePath : `/${certificatePath}`;
     setSelectedCertificate(`${baseUrl}${normalizedPath}`);
   };

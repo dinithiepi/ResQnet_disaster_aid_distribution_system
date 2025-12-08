@@ -19,7 +19,7 @@ function DisasterAreaManagement() {
 
   const fetchAreas = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/disaster-areas`);
+      const response = await fetch('http://localhost:4001/api/disaster-areas');
       const data = await response.json();
       setAreas(data);
     } catch (error) {
@@ -58,8 +58,8 @@ function DisasterAreaManagement() {
     
     try {
       const url = editingArea
-        ? `${process.env.REACT_APP_API_URL}/api/disaster-areas/${editingArea.areaid}`
-        : `${process.env.REACT_APP_API_URL}/api/disaster-areas`;
+        ? `http://localhost:4001/api/disaster-areas/${editingArea.areaid}`
+        : 'http://localhost:4001/api/disaster-areas';
       
       const method = editingArea ? 'PUT' : 'POST';
 
@@ -99,7 +99,7 @@ function DisasterAreaManagement() {
     }
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/disaster-areas/${areaid}`, {
+      const response = await fetch(`http://localhost:4001/api/disaster-areas/${areaid}`, {
         method: 'DELETE',
       });
 

@@ -9,7 +9,7 @@ app.use(cors());
 // -------------------------------
 // HARDCODE SERVICE URLS (NO ENV)
 // -------------------------------
-const ADMIN_URL = 'https://spirited-art-production.up.railway.app';
+const ADMIN_URL = 'https://miraculous-caring-production.up.railway.app';
 const INVENTORY_URL = 'https://brave-joy-production-9077.up.railway.app';
 const MANAGER_URL = 'https://cooperative-enthusiasm-production.up.railway.app';
 

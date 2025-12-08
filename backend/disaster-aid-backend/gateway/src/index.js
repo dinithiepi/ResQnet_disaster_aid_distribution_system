@@ -55,6 +55,6 @@ app.get('/', (req, res) => {
 });
 
 // START
-app.listen(process.env.PORT || 4001, () => {
-    console.log(`Gateway running on port ${process.env.PORT || 4001}...`);
+app.listen(process.env.PORT || 8080, () => {
+    console.log('Gateway running...');
 });

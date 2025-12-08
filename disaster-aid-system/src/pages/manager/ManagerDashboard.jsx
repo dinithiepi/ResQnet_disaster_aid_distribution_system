@@ -30,7 +30,7 @@ function ManagerDashboard() {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem('managerToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/manager/profile`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/manager/profile`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -51,7 +51,7 @@ function ManagerDashboard() {
   const fetchInventory = async () => {
     try {
       const token = localStorage.getItem('managerToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/manager/inventory`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/manager/inventory`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -66,7 +66,7 @@ function ManagerDashboard() {
   const fetchRequests = async () => {
     try {
       const token = localStorage.getItem('managerToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/manager/item-requests`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/manager/item-requests`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -87,7 +87,7 @@ function ManagerDashboard() {
 
     try {
       const token = localStorage.getItem('managerToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/manager/item-requests`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/manager/item-requests`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -119,7 +119,7 @@ function ManagerDashboard() {
 
     try {
       const token = localStorage.getItem('managerToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/manager/item-requests/received`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/manager/item-requests/received`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

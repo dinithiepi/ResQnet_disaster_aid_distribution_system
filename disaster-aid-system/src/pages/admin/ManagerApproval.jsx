@@ -14,7 +14,7 @@ function ManagerApproval() {
     try {
       const token = localStorage.getItem('adminToken');
       // Direct call to admin service to avoid gateway issues
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/managers/pending`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/managers/pending`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -38,7 +38,7 @@ function ManagerApproval() {
 
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/managers/approve`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/managers/approve`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

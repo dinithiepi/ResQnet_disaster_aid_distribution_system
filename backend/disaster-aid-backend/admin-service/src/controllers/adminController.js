@@ -95,7 +95,7 @@ exports.getPendingManagers = async (req, res) => {
     const query = `
       SELECT managerid, fname, lname, (fname || ' ' || lname) as name, email, phoneno, district, 
              certificatepath, createdat, status
-      FROM aidcentermanager1
+      FROM aidcentermanager
       WHERE status = 'pending'
       ORDER BY createdat DESC
     `;
@@ -123,7 +123,7 @@ exports.approveManager = async (req, res) => {
     console.log('Approving manager:', { managerId, adminId });
 
     // Get manager details to get their district
-    const managerQuery = 'SELECT * FROM aidcentermanager1 WHERE managerid = $1';
+    const managerQuery = 'SELECT * FROM aidcentermanager WHERE managerid = $1';
     const managerResult = await pool.query(managerQuery, [managerId]);
     
     if (managerResult.rows.length === 0) {
@@ -155,7 +155,7 @@ exports.approveManager = async (req, res) => {
 
     // Approve manager and assign to the new center
     const updateQuery = `
-      UPDATE aidcentermanager1
+      UPDATE aidcentermanager
       SET status = 'approved', approvedby = $1, approvedat = NOW(), centerid = $3, adminid = $1
       WHERE managerid = $2 AND status = 'pending'
       RETURNING managerid, fname, lname, name, email, centerid, status, district
@@ -191,7 +191,7 @@ exports.rejectManager = async (req, res) => {
     }
 
     const query = `
-      UPDATE aidcentermanager1
+      UPDATE aidcentermanager
       SET status = 'rejected', approvedby = $1, approvedat = NOW()
       WHERE managerid = $2 AND status = 'pending'
       RETURNING managerid, name, email
@@ -236,10 +236,10 @@ exports.getItemRequests = async (req, res) => {
         ac.location as center_location,
         ac.district as center_district
       FROM itemrequest ir
-      JOIN aidcentermanager1 m ON ir.managerid = m.managerid
+      JOIN aidcentermanager m ON ir.managerid = m.managerid
       JOIN aidcenter ac ON ir.centerid = ac.centerid
       ORDER BY 
-        CASE ir.status  
+        CASE ir.status 
           WHEN 'pending' THEN 1 
           WHEN 'approved' THEN 2 
           WHEN 'received' THEN 3 

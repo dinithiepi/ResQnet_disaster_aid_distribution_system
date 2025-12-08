@@ -76,7 +76,7 @@ exports.getMessages = async (req, res) => {
         END as sender_name
       FROM chatmessage cm
       LEFT JOIN admin a ON cm.sendertype = 'admin' AND cm.senderid = a.adminid
-      LEFT JOIN aidcentermanager1 m ON cm.sendertype = 'manager' AND cm.senderid = m.managerid
+      LEFT JOIN aidcentermanager m ON cm.sendertype = 'manager' AND cm.senderid = m.managerid
       WHERE 
         (cm.sendertype = 'manager' AND cm.senderid = $1 AND cm.receivertype = $2 AND cm.receiverid = $3)
         OR

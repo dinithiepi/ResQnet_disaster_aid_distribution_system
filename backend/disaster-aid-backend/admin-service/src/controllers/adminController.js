@@ -1,8 +1,7 @@
 const pool = require('../db');
 const bcrypt = require('bcrypt');
 
-// Admin Registration (using admin1 table)
-// Last updated: 2025-12-06
+// Admin Registration
 exports.register = async (req, res) => {
   try {
     const { name, email, password, phoneno } = req.body;

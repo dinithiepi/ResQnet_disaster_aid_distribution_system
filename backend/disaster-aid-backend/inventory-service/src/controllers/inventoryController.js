@@ -183,15 +183,6 @@ const updateDonationStatus = async (req, res) => {
   }
 };
 
-// Export functions
-module.exports = {
-  getInventory,
-  getdonations,
-  submitDonation,
-  getPendingDonations,
-  updateDonationStatus
-};
-
 // ==============================
 // CREATE NEW INVENTORY ITEM
 // ==============================
@@ -298,7 +289,7 @@ const deleteInventoryItem = async (req, res) => {
   }
 };
 
-// Update exports
+// Export all functions at the end
 module.exports = {
   getInventory,
   getdonations,

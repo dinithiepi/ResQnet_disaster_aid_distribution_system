@@ -54,8 +54,8 @@ export default function MapPage() {
 
   const fetchDisasterAreas = async () => {
     try {
-      console.log('🔍 Attempting to fetch disaster areas from http://localhost:4001/api/disaster-areas');
-      const response = await fetch('http://localhost:4001/api/disaster-areas');
+      console.log('🔍 Attempting to fetch disaster areas from http://localhost:4000/api/disaster-areas');
+      const response = await fetch('http://localhost:4000/api/disaster-areas');
       console.log('✅ Fetch response status:', response.status, response.statusText);
       if (response.ok) {
         const data = await response.json();
@@ -90,11 +90,11 @@ export default function MapPage() {
       } else {
         const errorText = await response.text();
         console.error('❌ Failed to fetch disaster areas:', response.status, errorText);
-        alert(`Failed to load disaster areas. Status: ${response.status}. Make sure gateway service is running on port 4001.`);
+        alert(`Failed to load disaster areas. Status: ${response.status}. Make sure gateway service is running on port 4000.`);
       }
     } catch (error) {
       console.error('❌ Error fetching disaster areas:', error);
-      alert(`Cannot connect to gateway service. Please ensure the backend service is running on port 4001.\n\nError: ${error.message}`);
+      alert(`Cannot connect to gateway service. Please ensure the backend service is running on port 4000.\n\nError: ${error.message}`);
     } finally {
       setLoading(false);
     }

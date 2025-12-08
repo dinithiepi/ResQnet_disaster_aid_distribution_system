@@ -16,10 +16,10 @@ function DashboardOverview() {
   const fetchStats = async () => {
     try {
       const [areasRes, inventoryRes, donationsRes, pendingRes] = await Promise.all([
-        fetch('http://localhost:4001/api/disaster-areas'),
-        fetch('http://localhost:4001/api/inventory'),
-        fetch('http://localhost:4001/inventory/donations'),
-        fetch('http://localhost:4001/inventory/donations/pending')
+        fetch('http://localhost:4000/api/disaster-areas'),
+        fetch('http://localhost:4000/api/inventory'),
+        fetch('http://localhost:4000/inventory/donations'),
+        fetch('http://localhost:4000/inventory/donations/pending')
       ]);
 
       const areas = await areasRes.json();

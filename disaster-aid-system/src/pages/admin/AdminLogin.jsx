@@ -25,7 +25,7 @@ function AdminLogin() {
 
     try {
       // TODO: Replace with actual API call to your backend
-      const response = await fetch('http://localhost:4002/api/admin/login', {
+      const response = await fetch('http://localhost:4000/admin/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

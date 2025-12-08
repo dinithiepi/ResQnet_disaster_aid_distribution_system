@@ -60,7 +60,7 @@ function AdminRegister() {
 
     try {
       // TODO: Replace with actual API call to your backend
-      const response = await fetch('http://localhost:4002/api/admin/register', {
+      const response = await fetch('http://localhost:4000/admin/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

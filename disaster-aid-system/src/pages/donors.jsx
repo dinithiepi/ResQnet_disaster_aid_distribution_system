@@ -20,7 +20,7 @@ export default function Donors() {
     setSubmitStatus('submitting');
 
     try {
-      const response = await fetch("http://localhost:4001/inventory/donations/submit", {
+      const response = await fetch("http://localhost:4000/inventory/donations/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

@@ -24,11 +24,18 @@ app.use(cors());
 // Proxy routes
 // ---------------------------
 
-// Forward requests to the inventory service
-app.use('/inventory', createProxyMiddleware({
-    target: 'http://localhost:4001', // inventory microservice
+// Forward requests to the inventory service (including disaster areas)
+app.use('/api', createProxyMiddleware({
+    target: 'http://localhost:4004', // inventory microservice
     changeOrigin: true,
-    pathRewrite: (path, req) => req.originalUrl.replace(/^\/inventory/, '/inventory')
+    pathRewrite: (path, req) => req.originalUrl
+}));
+
+// Forward inventory requests to the inventory service
+app.use('/inventory', createProxyMiddleware({
+    target: 'http://localhost:4004', // inventory microservice
+    changeOrigin: true,
+    pathRewrite: (path, req) => req.originalUrl.replace(/^^\/inventory/, '/inventory')
 }));
 
 // Forward requests to the admin service

@@ -19,33 +19,29 @@ const MANAGER_URL = 'https://cooperative-enthusiasm-production.up.railway.app';
 // -------------------------------
 
 // ADMIN SERVICE
-// Frontend: /api/admin/... -> Gateway -> Admin Service: /api/admin/...
-app.use(createProxyMiddleware('/api/admin', {
+app.use('/api/admin', createProxyMiddleware({
     target: ADMIN_URL,
     changeOrigin: true,
+    pathRewrite: {
+        '^/api/admin': '/api/admin',  
+    },
 }));
 
 // INVENTORY SERVICE
-// Frontend: /api/inventory/... -> Gateway -> Inventory Service: /api/inventory/...
-app.use(createProxyMiddleware('/api/inventory', {
+app.use('/api/inventory', createProxyMiddleware({
     target: INVENTORY_URL,
     changeOrigin: true,
-}));
-
-// DISASTER AREAS (INVENTORY SERVICE)
-// Frontend: /api/disaster-areas/... -> Gateway -> Inventory Service: /api/disaster-areas/...
-app.use(createProxyMiddleware('/api/disaster-areas', {
-    target: INVENTORY_URL,
-    changeOrigin: true,
+    pathRewrite: {
+        '^/api/inventory': '/api/inventory',
+    },
 }));
 
 // MANAGER SERVICE
-// Frontend: /api/manager/... -> Gateway -> Manager Service: /manager/...
-app.use(createProxyMiddleware('/api/manager', {
+app.use('/api/manager', createProxyMiddleware({
     target: MANAGER_URL,
     changeOrigin: true,
     pathRewrite: {
-        '^/api/manager': '/manager',
+        '^/api/manager': '/api/manager',
     },
 }));
 

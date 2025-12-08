@@ -25,7 +25,7 @@ function AdminLogin() {
 
     try {
       // TODO: Replace with actual API call to your backend
-      const response = await fetch(`${process.env.REACT_APP_API_URL1}/api/admin/login`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

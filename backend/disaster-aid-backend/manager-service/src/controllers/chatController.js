@@ -39,7 +39,7 @@ exports.getConversations = async (req, res) => {
           WHEN sendertype = 'manager' AND senderid = $1 THEN receiverid
           ELSE senderid
         END as other_id,
-        (SELECT a.name FROM admin1 a WHERE a.adminid = 
+        (SELECT a.name FROM admin a WHERE a.adminid = 
           CASE 
             WHEN sendertype = 'manager' AND senderid = $1 THEN receiverid
             ELSE senderid

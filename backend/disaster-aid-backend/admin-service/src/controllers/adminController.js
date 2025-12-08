@@ -94,9 +94,9 @@ exports.getPendingManagers = async (req, res) => {
     // Use concatenation for name to be safe if the generated column is missing
     const query = `
       SELECT managerid, fname, lname, (fname || ' ' || lname) as name, email, phoneno, district, 
-             certificatepath, createdat, COALESCE(status, 'pending') as status
+             certificatepath, createdat, status
       FROM aidcentermanager1
-      WHERE status = 'pending' OR status IS NULL
+      WHERE status = 'pending'
       ORDER BY createdat DESC
     `;
     const result = await pool.query(query);

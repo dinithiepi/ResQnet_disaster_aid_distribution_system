@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import API_BASE_URL from '../config/api';
 import "../styles.css";
 
 export default function Inventory() {
@@ -9,8 +10,8 @@ export default function Inventory() {
   useEffect(() => {
     // Fetch inventory data
     Promise.all([
-      fetch("http://localhost:4000/inventory").then(res => res.json()),
-      fetch("http://localhost:4000/inventory/donations").then(res => res.json())
+      fetch(`${API_BASE_URL}/inventory`).then(res => res.json()),
+      fetch(`${API_BASE_URL}/inventory/donations`).then(res => res.json())
     ])
       .then(([inventoryData, donationsData]) => {
         setInventory(inventoryData);

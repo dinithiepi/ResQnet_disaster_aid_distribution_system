@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import API_BASE_URL from '../../config/api';
 import "../../styles.css";
 
 export default function DonationManagement() {
@@ -15,8 +16,8 @@ export default function DonationManagement() {
     setLoading(true);
     try {
       const endpoint = activeTab === 'pending' 
-        ? 'http://localhost:4000/inventory/donations/pending'
-        : 'http://localhost:4000/inventory/donations';
+        ? `${API_BASE_URL}/inventory/donations/pending`
+        : `${API_BASE_URL}/inventory/donations`;
       
       const response = await fetch(endpoint);
       const data = await response.json();
@@ -35,7 +36,7 @@ export default function DonationManagement() {
 
   const handleStatusUpdate = async (donationId, newStatus, adminNotes = '') => {
     try {
-      const response = await fetch(`http://localhost:4000/inventory/donations/${donationId}/status`, {
+      const response = await fetch(`${API_BASE_URL}/inventory/donations/${donationId}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus, adminNotes })

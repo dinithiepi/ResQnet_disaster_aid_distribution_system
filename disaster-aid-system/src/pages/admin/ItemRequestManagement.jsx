@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API_BASE_URL from '../../config/api';
 import '../../styles.css';
 
 function ItemRequestManagement() {
@@ -16,7 +17,7 @@ function ItemRequestManagement() {
   const fetchItemRequests = async () => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch('http://localhost:4000/admin/item-requests', {
+      const response = await fetch(`${API_BASE_URL}/admin/item-requests`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -38,7 +39,7 @@ function ItemRequestManagement() {
 
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch('http://localhost:4000/admin/item-requests/approve', {
+      const response = await fetch(`${API_BASE_URL}/admin/item-requests/approve`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +74,7 @@ function ItemRequestManagement() {
 
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch('http://localhost:4000/admin/item-requests/reject', {
+      const response = await fetch(`${API_BASE_URL}/admin/item-requests/reject`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

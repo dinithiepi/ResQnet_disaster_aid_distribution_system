@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import API_BASE_URL from '../../config/api';
 import '../../styles.css';
 
 function ManagerDashboard() {
@@ -30,7 +31,7 @@ function ManagerDashboard() {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem('managerToken');
-      const response = await fetch('http://localhost:4000/manager/profile', {
+      const response = await fetch(`${API_BASE_URL}/manager/profile`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -51,7 +52,7 @@ function ManagerDashboard() {
   const fetchInventory = async () => {
     try {
       const token = localStorage.getItem('managerToken');
-      const response = await fetch('http://localhost:4000/manager/inventory', {
+      const response = await fetch(`${API_BASE_URL}/manager/inventory`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -66,7 +67,7 @@ function ManagerDashboard() {
   const fetchRequests = async () => {
     try {
       const token = localStorage.getItem('managerToken');
-      const response = await fetch('http://localhost:4000/manager/item-requests', {
+      const response = await fetch(`${API_BASE_URL}/manager/item-requests`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -87,7 +88,7 @@ function ManagerDashboard() {
 
     try {
       const token = localStorage.getItem('managerToken');
-      const response = await fetch('http://localhost:4000/manager/item-requests', {
+      const response = await fetch(`${API_BASE_URL}/manager/item-requests`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -119,7 +120,7 @@ function ManagerDashboard() {
 
     try {
       const token = localStorage.getItem('managerToken');
-      const response = await fetch('http://localhost:4000/manager/item-requests/received', {
+      const response = await fetch(`${API_BASE_URL}/manager/item-requests/received`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

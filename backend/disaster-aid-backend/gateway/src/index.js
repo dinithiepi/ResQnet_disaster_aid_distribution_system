@@ -8,6 +8,16 @@ require('dotenv').config(); // load environment variables from .env
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+// Service URLs - use environment variables for production deployment
+const INVENTORY_SERVICE_URL = process.env.INVENTORY_URL || 'http://localhost:4004';
+const ADMIN_SERVICE_URL = process.env.ADMIN_URL || 'http://localhost:4002';
+const MANAGER_SERVICE_URL = process.env.MANAGER_URL || 'http://localhost:4003';
+
+console.log('🚀 Gateway Configuration:');
+console.log('📦 Inventory Service:', INVENTORY_SERVICE_URL);
+console.log('👤 Admin Service:', ADMIN_SERVICE_URL);
+console.log('👔 Manager Service:', MANAGER_SERVICE_URL);
+
 // ---------------------------
 // Middleware
 // ---------------------------
@@ -26,21 +36,21 @@ app.use(cors());
 
 // Forward requests to the inventory service (including disaster areas)
 app.use('/api', createProxyMiddleware({
-    target: 'http://localhost:4004', // inventory microservice
+    target: INVENTORY_SERVICE_URL,
     changeOrigin: true,
     pathRewrite: (path, req) => req.originalUrl
 }));
 
 // Forward inventory requests to the inventory service
 app.use('/inventory', createProxyMiddleware({
-    target: 'http://localhost:4004', // inventory microservice
+    target: INVENTORY_SERVICE_URL,
     changeOrigin: true,
     pathRewrite: (path, req) => req.originalUrl.replace(/^^\/inventory/, '/inventory')
 }));
 
 // Forward requests to the admin service
 app.use('/admin', createProxyMiddleware({
-    target: 'http://localhost:4002', // admin microservice
+    target: ADMIN_SERVICE_URL,
     changeOrigin: true,
     pathRewrite: {
         '^/admin': '/api/admin', // rewrite path
@@ -49,9 +59,16 @@ app.use('/admin', createProxyMiddleware({
 
 // Forward requests to the manager service
 app.use('/manager', createProxyMiddleware({
-    target: 'http://localhost:4003', // manager microservice
+    target: MANAGER_SERVICE_URL,
     changeOrigin: true,
     pathRewrite: (path, req) => req.originalUrl.replace(/^\/manager/, '/manager')
+}));
+
+// Forward uploaded certificate files to manager service
+app.use('/uploads', createProxyMiddleware({
+    target: MANAGER_SERVICE_URL,
+    changeOrigin: true,
+    pathRewrite: (path, req) => req.originalUrl
 }));
 
 // ---------------------------

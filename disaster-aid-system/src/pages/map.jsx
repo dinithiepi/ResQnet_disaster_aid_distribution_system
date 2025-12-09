@@ -2,6 +2,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useState, useEffect } from "react";
+import API_BASE_URL from '../config/api';
 import "../styles.css";
 
 // Fix missing default marker icons in Leaflet build tools
@@ -54,8 +55,8 @@ export default function MapPage() {
 
   const fetchDisasterAreas = async () => {
     try {
-      console.log('🔍 Attempting to fetch disaster areas from http://localhost:4000/api/disaster-areas');
-      const response = await fetch('http://localhost:4000/api/disaster-areas');
+      console.log(`🔍 Attempting to fetch disaster areas from ${API_BASE_URL}/api/disaster-areas`);
+      const response = await fetch(`${API_BASE_URL}/api/disaster-areas`);
       console.log('✅ Fetch response status:', response.status, response.statusText);
       if (response.ok) {
         const data = await response.json();

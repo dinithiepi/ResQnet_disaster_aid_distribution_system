@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API_BASE_URL from '../../config/api';
 import '../../styles.css';
 
 function DisasterAreaManagement() {
@@ -19,7 +20,7 @@ function DisasterAreaManagement() {
 
   const fetchAreas = async () => {
     try {
-      const response = await fetch('http://localhost:4000/api/disaster-areas');
+      const response = await fetch(`${API_BASE_URL}/api/disaster-areas`);
       const data = await response.json();
       setAreas(data);
     } catch (error) {
@@ -58,8 +59,8 @@ function DisasterAreaManagement() {
     
     try {
       const url = editingArea
-        ? `http://localhost:4000/api/disaster-areas/${editingArea.areaid}`
-        : 'http://localhost:4000/api/disaster-areas';
+        ? `${API_BASE_URL}/api/disaster-areas/${editingArea.areaid}`
+        : `${API_BASE_URL}/api/disaster-areas`;
       
       const method = editingArea ? 'PUT' : 'POST';
 
@@ -99,7 +100,7 @@ function DisasterAreaManagement() {
     }
 
     try {
-      const response = await fetch(`http://localhost:4000/api/disaster-areas/${areaid}`, {
+      const response = await fetch(`${API_BASE_URL}/api/disaster-areas/${areaid}`, {
         method: 'DELETE',
       });
 

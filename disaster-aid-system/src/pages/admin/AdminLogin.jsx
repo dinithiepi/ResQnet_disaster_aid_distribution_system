@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import API_BASE_URL from '../../config/api';
 import '../../styles.css';
 
 function AdminLogin() {
@@ -25,7 +26,7 @@ function AdminLogin() {
 
     try {
       // TODO: Replace with actual API call to your backend
-      const response = await fetch('http://localhost:4000/admin/login', {
+      const response = await fetch(`${API_BASE_URL}/admin/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

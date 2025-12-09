@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import API_BASE_URL from '../../config/api';
 import '../../styles.css';
 
 function ManagerRegister() {
@@ -86,7 +87,7 @@ function ManagerRegister() {
       data.append('district', formData.district);
       data.append('certificate', certificate);
 
-      const response = await fetch('http://localhost:4000/manager/register', {
+      const response = await fetch(`${API_BASE_URL}/manager/register`, {
         method: 'POST',
         body: data
       });

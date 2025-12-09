@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API_BASE_URL from '../../config/api';
 import '../../styles.css';
 
 function ManagerApproval() {
@@ -14,7 +15,7 @@ function ManagerApproval() {
     try {
       const token = localStorage.getItem('adminToken');
       // Direct call to admin service to avoid gateway issues
-      const response = await fetch('http://localhost:4000/admin/managers/pending', {
+      const response = await fetch(`${API_BASE_URL}/admin/managers/pending`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -38,7 +39,7 @@ function ManagerApproval() {
 
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch('http://localhost:4000/admin/managers/approve', {
+      const response = await fetch(`${API_BASE_URL}/admin/managers/approve`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +65,7 @@ function ManagerApproval() {
   const handleReject = async (managerId) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch('http://localhost:4000/admin/managers/reject', {
+      const response = await fetch(`${API_BASE_URL}/admin/managers/reject`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,9 +88,8 @@ function ManagerApproval() {
   };
 
   const viewCertificate = (certificatePath) => {
-    const baseUrl = 'http://localhost:4000';
     const normalizedPath = certificatePath.startsWith('/') ? certificatePath : `/${certificatePath}`;
-    setSelectedCertificate(`${baseUrl}${normalizedPath}`);
+    setSelectedCertificate(`${API_BASE_URL}${normalizedPath}`);
   };
 
   if (loading) {

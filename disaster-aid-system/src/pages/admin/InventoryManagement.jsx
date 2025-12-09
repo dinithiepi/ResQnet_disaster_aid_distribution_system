@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API_BASE_URL from '../../config/api';
 import '../../styles.css';
 
 function InventoryManagement() {
@@ -20,7 +21,7 @@ function InventoryManagement() {
 
   const fetchInventory = async () => {
     try {
-      const response = await fetch('http://localhost:4000/api/inventory');
+      const response = await fetch(`${API_BASE_URL}/api/inventory`);
       const data = await response.json();
       setInventory(data);
     } catch (error) {
@@ -70,8 +71,8 @@ function InventoryManagement() {
     
     try {
       const url = editingItem
-        ? `http://localhost:4000/api/inventory/${editingItem.itemid}`
-        : 'http://localhost:4000/api/inventory';
+        ? `${API_BASE_URL}/api/inventory/${editingItem.itemid}`
+        : `${API_BASE_URL}/api/inventory`;
       
       const method = editingItem ? 'PUT' : 'POST';
 
@@ -112,7 +113,7 @@ function InventoryManagement() {
     }
 
     try {
-      const response = await fetch(`http://localhost:4000/api/inventory/${itemid}`, {
+      const response = await fetch(`${API_BASE_URL}/api/inventory/${itemid}`, {
         method: 'DELETE',
       });
 

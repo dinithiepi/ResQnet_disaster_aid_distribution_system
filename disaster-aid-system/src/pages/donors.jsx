@@ -1,4 +1,5 @@
 import { useState } from "react";
+import API_BASE_URL from '../config/api';
 
 export default function Donors() {
   const [form, setForm] = useState({
@@ -20,7 +21,7 @@ export default function Donors() {
     setSubmitStatus('submitting');
 
     try {
-      const response = await fetch("http://localhost:4000/inventory/donations/submit", {
+      const response = await fetch(`${API_BASE_URL}/inventory/donations/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

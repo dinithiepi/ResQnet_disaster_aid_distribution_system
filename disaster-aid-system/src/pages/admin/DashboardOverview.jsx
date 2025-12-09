@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API_BASE_URL from '../../config/api';
 import '../../styles.css';
 
 function DashboardOverview() {
@@ -16,10 +17,10 @@ function DashboardOverview() {
   const fetchStats = async () => {
     try {
       const [areasRes, inventoryRes, donationsRes, pendingRes] = await Promise.all([
-        fetch('http://localhost:4000/api/disaster-areas'),
-        fetch('http://localhost:4000/api/inventory'),
-        fetch('http://localhost:4000/inventory/donations'),
-        fetch('http://localhost:4000/inventory/donations/pending')
+        fetch(`${API_BASE_URL}/api/disaster-areas`),
+        fetch(`${API_BASE_URL}/api/inventory`),
+        fetch(`${API_BASE_URL}/inventory/donations`),
+        fetch(`${API_BASE_URL}/inventory/donations/pending`)
       ]);
 
       const areas = await areasRes.json();

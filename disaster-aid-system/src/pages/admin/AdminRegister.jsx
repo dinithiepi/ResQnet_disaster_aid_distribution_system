@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import API_BASE_URL from '../../config/api';
 import '../../styles.css';
 
 function AdminRegister() {
@@ -60,7 +61,7 @@ function AdminRegister() {
 
     try {
       // TODO: Replace with actual API call to your backend
-      const response = await fetch('http://localhost:4000/admin/register', {
+      const response = await fetch(`${API_BASE_URL}/admin/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

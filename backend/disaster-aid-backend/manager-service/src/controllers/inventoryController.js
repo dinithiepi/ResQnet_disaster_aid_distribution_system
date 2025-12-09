@@ -1,4 +1,4 @@
-const pool = require('../../../db/db');
+const pool = require('../db');
 
 // Get Aid Center Inventory
 exports.getInventory = async (req, res) => {

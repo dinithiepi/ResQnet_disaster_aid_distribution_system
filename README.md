@@ -47,7 +47,6 @@ ResqNet solves this by providing:
 ### Frontend
 - React  
 - Vite  
-- Tailwind CSS (if used)
 
 ### Backend
 - Node.js  
@@ -61,8 +60,10 @@ ResqNet solves this by providing:
 
 ### Hosting
 - Frontend → Vercel  
-- Backend → Railway  
-- Database → Supabase  
+- Backend → Railway
+- ![Backend hosting](./screenshots/Screenshot10.png)
+- Database → Supabase
+- ![DB hosting](./screenshots/Screenshot9.png) 
 
 ---
 
@@ -74,21 +75,21 @@ I learned to design full-stack architectures, build secure role-based systems, m
 
 ## 🖼️ Screenshots
 
-Create a `/screenshots` folder and add your images.  
-Then reference them like this:
 
-```md
 ### 🔷 Home Page
-<img width="1667" height="719" alt="home page" src="https://github.com/dinithiepi/ResQnet_disaster_aid_distribution_system/blob/main/screenshots/Screenshot1.png" />
+![Home Page](./screenshots/Screenshot1.png)
 
 ### 🔷 Donations Page
 ![Donations](./screenshots/Screenshot2.png)
 
 ### 🔷 Disaster Severity Map
+![Map](./screenshots/Screenshot4.png)
+
+### 🔷 Inventory Map
 ![Map](./screenshots/Screenshot3.png)
 
 ### 🔷 Admin Dashboard
-![Admin Dashboard](./screenshots/admin-dashboard.png)
+![Admin Dashboard](./screenshots/Screenshot5.png)
 
 ### 🔷 Manager Dashboard
-![Manager Dashboard](./screenshots/manager-dashboard.png)
+![Manager Dashboard](./screenshots/Screenshot7.png)

@@ -1,4 +1,5 @@
 # ResqNet – Disaster Aid Distribution Platform
+# [URL] - https://resqnett.vercel.app
 
 ResqNet is a full-stack web platform built to bring transparency, structure, and trust to disaster aid distribution in Sri Lanka.  
 It enables public donations, verified aid center management, and real-time disaster severity tracking.
